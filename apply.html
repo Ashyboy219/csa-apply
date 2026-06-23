@@ -13,36 +13,38 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="frame">
 
-    <!-- top bar — same grammar as the flyer header -->
-    <header class="topbar">
-      <div class="tb-left">
+  <!-- top bar -->
+  <header class="nav">
+    <div class="wrap nav-in">
+      <a class="brand" href="/">
         <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
-        <a class="brand" href="/">CODE SHARE ACADEMY</a>
-        <a class="path" href="/">← overview</a>
+        <span class="brand-name">CODE&nbsp;SHARE&nbsp;ACADEMY</span>
+        <span class="brand-path">/ apply.py</span>
+      </a>
+      <div class="nav-right">
+        <a class="status status-link" href="/">← overview</a>
+        <span class="badge-free static">1ST&nbsp;CLASS&nbsp;FREE</span>
       </div>
-      <div class="tb-right">
-        <span class="status"><span class="dot" aria-hidden="true"></span> fall cohort · seats limited</span>
-        <span class="freebadge">1ST CLASS FREE</span>
-      </div>
-    </header>
+    </div>
+  </header>
 
-    <main>
+  <main class="apply-main">
+    <div class="wrap apply-wrap">
       <p class="eyebrow">// application · ai + coding · grades 6–8</p>
-      <h1 class="headline">Claim your <span class="accent">seat</span>.</h1>
+      <h1 class="headline apply-headline">Claim your <span class="accent">seat</span>.</h1>
       <p class="lede">Seats are limited and we take a small cohort on purpose. First class is free, then $25 a class, pay as you go. This takes about three minutes, and a founder who actually ships AI reads <b>every single one</b>.</p>
 
       <!-- the form, framed as a code editor -->
-      <form class="editor" id="apply-form" novalidate>
+      <form class="editor form-editor" id="apply-form" novalidate>
         <div class="editor-bar">
           <span class="dots small" aria-hidden="true"><i></i><i></i><i></i></span>
           <span class="tab">application.py <span class="x" aria-hidden="true">×</span></span>
-          <span class="editor-meta">~/future-coders ›&nbsp; UTF-8</span>
+          <span class="editor-meta">~/code-share ›&nbsp; UTF-8</span>
         </div>
 
         <div class="editor-body">
@@ -139,7 +141,7 @@
           <fieldset class="line">
             <span class="ln" aria-hidden="true">09</span>
             <div class="field">
-              <label for="availability"># Saturdays 11:30–12:30, Jul 25 – Sep 19<span class="req">*</span></label>
+              <label for="availability"># Saturdays 11:30–12:30, Jul 25 – Sep 26<span class="req">*</span></label>
               <select id="availability" name="availability" required>
                 <option value="" disabled selected hidden>select…</option>
                 <option value="Yes, all of them">Yes, I can make all of them</option>
@@ -168,21 +170,24 @@
         </div>
 
         <div class="statusbar" aria-hidden="true">
-          <span class="sb-dot"></span>
-          <span id="sb-state">ready</span>
-          <span class="sep">·</span><span>main</span>
-          <span class="sep">·</span><span>seats limited</span>
+          <span class="sb-left">
+            <span class="sb-dot"></span>
+            <span id="sb-state" class="ok-t">ready</span>
+            <span class="sep">·</span><span>main</span>
+            <span class="sep">·</span><span>seats limited</span>
+          </span>
           <span class="sb-right">we read every one</span>
         </div>
       </form>
-    </main>
+    </div>
+  </main>
 
-    <footer>
+  <footer>
+    <div class="wrap footer-in">
       <span>© 2026 Code Share Academy · learn to build, not just use.</span>
       <span>online · grades 6–8 · seattle &nbsp;·&nbsp; <a href="tel:+14256775903">(425) 677-5903</a></span>
-    </footer>
-
-  </div>
+    </div>
+  </footer>
 
   <script type="module" src="app.js"></script>
 </body>

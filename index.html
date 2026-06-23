@@ -3,181 +3,214 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Code Share Academy · the build studio for grades 6–8</title>
-  <meta name="description" content="A small fall cohort for grades 6–8. A total beginner ships a real AI project that's entirely theirs, and walks away understanding how it actually works. Built on Claude Max, the AI professionals use, included free. First class free. Seats limited." />
+  <title>Code Share Academy · build the AI passion project that gets you noticed</title>
+  <meta name="description" content="A 9-week AI + coding cohort for grades 6–8. A total beginner ships a real, working AI project that's entirely theirs, built on Claude Max, included free. First class free, then $25 a class. Seats limited." />
   <meta name="color-scheme" content="dark" />
 
   <meta property="og:title" content="Code Share Academy · build the passion project that gets you noticed" />
-  <meta property="og:description" content="AI and coding for grades 6–8. Ship a real project that's entirely yours, on Claude Max, included free. First class free. Seats limited." />
+  <meta property="og:description" content="AI + coding for grades 6–8. Ship a real project that's entirely yours, on Claude Max, included free. First class free. Seats limited." />
   <meta property="og:type" content="website" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="frame site">
 
-    <header class="topbar">
-      <div class="tb-left">
+  <!-- ───────── top bar ───────── -->
+  <header class="nav">
+    <div class="wrap nav-in">
+      <a class="brand" href="/">
         <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
-        <a class="brand" href="/">CODE SHARE ACADEMY</a>
-        <span class="path">/ the-edge.md</span>
+        <span class="brand-name">CODE&nbsp;SHARE&nbsp;ACADEMY</span>
+        <span class="brand-path">/ the-edge.md</span>
+      </a>
+      <div class="nav-right">
+        <span class="status"><span class="pulse" aria-hidden="true"></span> fall cohort · filling now</span>
+        <a class="badge-free" href="/apply">1ST&nbsp;CLASS&nbsp;FREE →</a>
       </div>
-      <div class="tb-right">
-        <span class="status"><span class="dot" aria-hidden="true"></span> cohort 1 · seats limited</span>
-        <a class="freebadge" href="/apply">1ST CLASS FREE →</a>
-      </div>
-    </header>
+    </div>
+  </header>
 
-    <main>
+  <main>
 
-      <!-- ───── hero ───── -->
-      <section class="hero">
+    <!-- ───────── hero ───────── -->
+    <section class="hero">
+      <div class="wrap hero-in">
         <div class="hero-copy">
-          <p class="eyebrow">// the build studio · ai + coding · grades 6–8</p>
+          <p class="eyebrow">// ai + coding · grades 6–8 · beginners welcome</p>
           <div class="chips">
-            <span class="chip">COHORT 1</span>
+            <span class="chip">FALL COHORT</span>
             <span class="chip g">SEATS LIMITED</span>
           </div>
           <h1 class="headline">Build the <span class="accent">passion project</span> that makes everyone look your way.</h1>
-          <p class="lede">Nine weeks. A total beginner ships a real AI project that's <b>entirely theirs</b>, and walks away <b>understanding how it actually works</b>. The kind of standout that gets a kid noticed, on an application and beyond.</p>
-          <div class="hero-cta">
-            <a class="btn" href="/apply">Claim your seat →</a>
-            <span class="cta-note"><b>1st class free</b> · seats limited · ~3 min to apply</span>
+          <p class="lede">A 9-week cohort where a total beginner goes from zero to shipping <b>a real, working AI project that's entirely theirs</b>. The kind of standout work that <b>gets a kid noticed, on an application and anywhere else.</b></p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="/apply">Claim your seat →</a>
+            <a class="btn btn-ghost" href="tel:+14256775903">Call or text</a>
           </div>
+          <p class="cta-note"><b>1st class free</b> · then $25 a class, pay as you go · ~3 min to apply</p>
         </div>
 
-        <aside class="hero-window" aria-label="Example student project">
-          <div class="editor">
+        <aside class="hero-panel" aria-label="Example student project">
+          <div class="editor code-editor">
             <div class="editor-bar">
               <span class="dots small" aria-hidden="true"><i></i><i></i><i></i></span>
               <span class="tab">passion_project.py <span class="x" aria-hidden="true">×</span></span>
-              <span class="editor-meta">~/future-coders ›&nbsp; UTF-8</span>
+              <span class="editor-meta">~/code-share ›&nbsp; UTF-8</span>
             </div>
-            <div class="code">
-              <div class="row"><span class="gut">1</span><span><span class="cm"># passion_project.py  (shipped in week 7)</span></span></div>
-              <div class="row"><span class="gut">2</span><span><span class="kw">from</span> studio <span class="kw">import</span> Agent, ship</span></div>
-              <div class="row"><span class="gut">3</span><span>idea = <span class="str">"an app that quizzes my class on anything"</span></span></div>
-              <div class="row"><span class="gut">4</span><span>app = <span class="fn">Agent</span>(idea).<span class="fn">build</span>()   <span class="cm"># describe it, AI writes the code</span></span></div>
-              <div class="row"><span class="gut">5</span><span><span class="fn">ship</span>(app)                <span class="cm"># live, shareable, entirely theirs</span></span></div>
-              <div class="row"><span class="gut">6</span><span><span class="cm"># reviewed by a founder who ships real AI </span><span class="ok">✓</span></span></div>
+            <div class="code-scroll">
+              <div class="code">
+                <div class="row"><span class="gut">1</span><span class="cm"># passion_project.py · shipped in week 7</span></div>
+                <div class="row"><span class="gut">2</span><span>&nbsp;</span></div>
+                <div class="row"><span class="gut">3</span><span><span class="kw">from</span> studio <span class="kw">import</span> Agent, ship</span></div>
+                <div class="row"><span class="gut">4</span><span>&nbsp;</span></div>
+                <div class="row"><span class="gut">5</span><span>idea = <span class="str">"an app that quizzes my class on anything"</span></span></div>
+                <div class="row"><span class="gut">6</span><span>app&nbsp;&nbsp;= <span class="fn">Agent</span>(idea).<span class="fn">build</span>()&nbsp;&nbsp;&nbsp;<span class="cm"># describe it → AI writes the code</span></span></div>
+                <div class="row"><span class="gut">7</span><span>&nbsp;</span></div>
+                <div class="row"><span class="gut">8</span><span><span class="fn">ship</span>(app)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># live, shareable, and entirely theirs</span></span></div>
+                <div class="row"><span class="gut">9</span><span><span class="cm"># reviewed by a founder who ships real AI</span> <span class="ok">✓</span><span class="caret" aria-hidden="true"></span></span></div>
+              </div>
             </div>
             <div class="statusbar" aria-hidden="true">
-              <span class="sb-dot"></span><span>shipped</span>
-              <span class="sep">·</span><span>main</span>
-              <span class="sep">·</span><span>Python</span>
-              <span class="sep">·</span><span>built by a 7th grader</span>
-              <span class="sb-right">Ln 9, Col 41</span>
+              <span class="sb-left"><span class="sb-dot"></span><span class="ok-t">shipped</span><span class="sep">·</span><span>main</span><span class="sep">·</span><span>Python</span></span>
+              <span class="sb-right"><span>built by a 7th grader</span></span>
             </div>
           </div>
         </aside>
-      </section>
-
-      <!-- ───── specs ───── -->
-      <div class="specs">
-        <div class="spec"><div class="k">When</div><div class="v">9 Saturdays<small>Jul 25 – Sep 19</small></div></div>
-        <div class="spec"><div class="k">Time</div><div class="v">11:30 – 12:30<small>Pacific</small></div></div>
-        <div class="spec"><div class="k">Where</div><div class="v">Online<small>live on Zoom</small></div></div>
-        <div class="spec"><div class="k">Who</div><div class="v">Grades 6–8<small>beginners welcome</small></div></div>
       </div>
+    </section>
 
-      <!-- ───── the window ───── -->
-      <section class="statement">
+    <!-- ───────── schedule strip ───────── -->
+    <section class="specs-sec">
+      <div class="wrap">
+        <div class="specs">
+          <div class="spec"><div class="k">When</div><div class="v">10 Saturdays<small>Jul 25 – Sep 26</small></div></div>
+          <div class="spec"><div class="k">Time</div><div class="v">11:30 – 12:30<small>PM Pacific</small></div></div>
+          <div class="spec"><div class="k">Where</div><div class="v">Online · Zoom<small>Seattle area</small></div></div>
+          <div class="spec"><div class="k">Who</div><div class="v">Grades 6–8<small>beginners OK</small></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───────── the window ───────── -->
+    <section class="statement">
+      <div class="wrap statement-in">
         <p class="eyebrow">// the window</p>
-        <div class="statement-body">
-          <p class="big">Every kid is about to <span class="muted">use</span> AI. The few who learn to <b>build</b> with it are the ones who get noticed.</p>
-          <p class="sub">This is the window. Most kids will spend the year asking AI for answers. A few will spend it learning to build.</p>
-        </div>
-      </section>
-
-      <!-- ───── Claude Max ───── -->
-      <section class="maxfeature">
-        <div class="mf-left">
-          <p class="eyebrow">// the tools</p>
-          <h2 class="mf-title">Every student builds on Claude Max.</h2>
-        </div>
-        <div class="mf-right">
-          <p class="mf-lead">Included free, all nine weeks.</p>
-          <p class="mf-body">The same frontier AI professional developers build with, normally $200 a month. No toy sandbox, no watered-down classroom edition. Your child learns on the real thing, the way we do.</p>
-        </div>
-      </section>
-
-      <!-- ───── curriculum ───── -->
-      <div class="curriculum-head">
-        <p class="section-label">// the-edge.md</p>
-        <p class="curriculum-sub">Half of it is <b>understanding how AI actually works</b>, not just clicking buttons. The other half, building something only your kid would make.</p>
+        <p class="big">Every kid is about to <span class="muted">use</span> AI. The few who learn to <span class="accent">build</span> with it are the ones who get noticed.</p>
+        <p class="sub">Most kids will spend this year asking AI for answers. A few will spend it learning to build. This is for the few.</p>
       </div>
-      <div class="weeks">
-        <div class="week"><span class="n">01</span><span class="t">Welcome to the AI age</span></div>
-        <div class="week"><span class="n">02</span><span class="t">How computers actually think</span></div>
-        <div class="week"><span class="n">03</span><span class="t">Real code: intro to Python</span></div>
-        <div class="week"><span class="n">04</span><span class="t">Prompt to product: build by describing</span></div>
-        <div class="week"><span class="n">05</span><span class="t">What is machine learning?</span></div>
-        <div class="week"><span class="n">06</span><span class="t">Inside the chatbot</span></div>
-        <div class="week"><span class="n">07</span><span class="t">Build your project · part 1</span></div>
-        <div class="week"><span class="n">08</span><span class="t">Build your project · part 2</span></div>
-        <div class="week last"><span class="n">09</span><span class="t">Showcase &amp; your future</span></div>
+    </section>
+
+    <!-- ───────── Claude Max ───────── -->
+    <section class="maxband">
+      <div class="wrap maxband-in">
+        <span class="max-tag">CLAUDE MAX INCLUDED</span>
+        <p class="max-copy">Every student builds on <b>Claude Max</b>, the same $200&#8202;/&#8202;mo frontier AI that working developers ship with. No toy sandbox, no watered-down classroom edition. Included free, the entire cohort.</p>
       </div>
+    </section>
 
-      <!-- ───── payoff ───── -->
-      <section class="payoff">
-        <div class="payoff-main">
-          <p class="eyebrow">// the payoff</p>
-          <p class="lead">A real, finished project to show. The kind of work that earns a second look on a portfolio, application, or interview.</p>
-        </div>
-        <div class="payoff-tools">
-          <p class="meta">
-            <b>tools</b><br />Scratch · Teachable Machine · Replit · Claude, ChatGPT, Gemini<br /><br />
-            <b>nothing to install</b><br />it all runs in the browser
-          </p>
-        </div>
-      </section>
+    <!-- ───────── curriculum ───────── -->
+    <section class="curriculum">
+      <div class="wrap cur-grid">
 
-      <!-- ───── who's teaching ───── -->
-      <p class="section-label">// who's teaching</p>
-      <div class="teachers">
-        <div class="teacher"><span class="av" aria-hidden="true">AN</span><div><div class="nm">Ashish Naik</div><div class="ro">instructor</div></div></div>
-        <div class="teacher"><span class="av" aria-hidden="true">AG</span><div><div class="nm">Arnav Gollapally</div><div class="ro">instructor</div></div></div>
-        <div class="teacher"><span class="av" aria-hidden="true">SD</span><div><div class="nm">Shaurya Duggal</div><div class="ro">instructor</div></div></div>
+        <div class="cur-build">
+          <p class="section-label">// the 9-week build</p>
+          <p class="cur-sub">Half of it is <b>understanding how AI actually works</b>, not just clicking buttons. The other half is building something only your kid would make.</p>
+          <ol class="weeks">
+            <li class="week"><span class="n">01</span><span class="t">Welcome to the AI age</span></li>
+            <li class="week"><span class="n">02</span><span class="t">How computers think</span></li>
+            <li class="week"><span class="n">03</span><span class="t">Real code: intro to Python</span></li>
+            <li class="week"><span class="n">04</span><span class="t">Context engineering and creation</span></li>
+            <li class="week"><span class="n">05</span><span class="t">What is machine learning?</span></li>
+            <li class="week"><span class="n">06</span><span class="t">Inside the chatbot</span></li>
+            <li class="week"><span class="n">07</span><span class="t">Build your project · part 1</span></li>
+            <li class="week"><span class="n">08</span><span class="t">Build your project · part 2</span></li>
+            <li class="week last"><span class="n">09</span><span class="t">Showcase &amp; your future</span></li>
+          </ol>
+        </div>
+
+        <div class="cur-gains">
+          <p class="section-label">// what they walk away with</p>
+          <ul class="gains">
+            <li><span class="plus">+</span><span>Real code, only the code that matters in 2026</span></li>
+            <li><span class="plus">+</span><span>The ability to <b>ship</b> a real, working product</span></li>
+            <li><span class="plus">+</span><span>A machine-learning model trained on their own data</span></li>
+            <li><span class="plus">+</span><span>The judgment to use AI well, and spot its limits</span></li>
+            <li><span class="plus">+</span><span>A finished project they present, and are proud of</span></li>
+          </ul>
+          <div class="payoff">
+            <p class="payoff-label">// the payoff</p>
+            <p class="payoff-copy">A real, finished project to show: a <b>standout</b> for any portfolio, application, or interview down the road.</p>
+          </div>
+          <p class="tools-line">tools: Teachable Machine · Replit · Claude / ChatGPT / Gemini<br />nothing to install, it all runs in the browser</p>
+        </div>
+
       </div>
-      <p class="credit">Led by <b>1st-place TiE Global Pitch Competition winners</b>, founders shipping real AI products today. Your child learns from the people who build the thing, not a textbook. We keep the cohort small on purpose, and read every application. Every dollar funds a local nonprofit.</p>
-      <p class="sources">
-        <a href="https://www.geekwire.com/2026/students-pitch-startups-in-regional-tie-young-entrepreneurs-finals-vying-to-three-peat-in-global-contest/" target="_blank" rel="noopener noreferrer">GeekWire</a>
-        <span class="sep">·</span>
-        <a href="https://www.linkedin.com/posts/tie-seattle_tyeseattle-tyeglobal-duggai-activity-7473807275753623552-PwHP" target="_blank" rel="noopener noreferrer">TiE Seattle</a>
-        <span class="sep">·</span>
-        <a href="https://duggai.com" target="_blank" rel="noopener noreferrer">duggai.com</a>
-      </p>
+    </section>
 
-      <!-- ───── final CTA ───── -->
-      <section class="cta-band">
-        <div class="cta-head">
-          <h2>First class, free.</h2>
-          <span class="freebadge g">SEATS LIMITED</span>
+    <!-- ───────── instructors ───────── -->
+    <section class="instructors">
+      <div class="wrap">
+        <p class="section-label">// who's teaching</p>
+        <div class="teachers">
+          <figure class="teacher">
+            <img src="assets/shaurya.jpg" alt="Shaurya Duggal" width="400" height="400" loading="lazy" />
+            <figcaption><span class="nm">Shaurya Duggal</span><span class="ro">instructor</span></figcaption>
+          </figure>
+          <figure class="teacher">
+            <img src="assets/ashish.jpg" alt="Ashish Naik" width="400" height="400" loading="lazy" />
+            <figcaption><span class="nm">Ashish Naik</span><span class="ro">instructor</span></figcaption>
+          </figure>
+          <figure class="teacher">
+            <img src="assets/arnav.jpg" alt="Arnav Gollapally" width="400" height="400" loading="lazy" />
+            <figcaption><span class="nm">Arnav Gollapally</span><span class="ro">instructor</span></figcaption>
+          </figure>
         </div>
-        <p class="sub">Then $25 a class, pay as you go. No package, no pressure, just the open seat while it lasts.</p>
+        <p class="credit">Led by <b>1st-place TiE Global Pitch Competition winners</b>, founders shipping real AI products today. Your child learns from the people who build the thing, not a textbook. We keep the cohort small on purpose, and read every application.</p>
+        <p class="sources">
+          <a href="https://www.geekwire.com/2026/students-pitch-startups-in-regional-tie-young-entrepreneurs-finals-vying-to-three-peat-in-global-contest/" target="_blank" rel="noopener noreferrer">GeekWire</a>
+          <span class="sep">·</span>
+          <a href="https://www.linkedin.com/posts/tie-seattle_tyeseattle-tyeglobal-duggai-activity-7473807275753623552-PwHP" target="_blank" rel="noopener noreferrer">TiE Seattle</a>
+          <span class="sep">·</span>
+          <a href="https://duggai.com" target="_blank" rel="noopener noreferrer">duggai.com</a>
+        </p>
+      </div>
+    </section>
+
+    <!-- ───────── final CTA ───────── -->
+    <section class="cta-band">
+      <div class="wrap cta-band-in">
+        <div class="cta-top">
+          <div>
+            <h2 class="cta-h">First class, free.</h2>
+            <p class="cta-p">Then $25 a class, pay as you go. No package, no pressure, just the open seat while it lasts.</p>
+          </div>
+          <span class="badge-free g">SEATS LIMITED</span>
+        </div>
         <div class="cta-foot">
           <div class="claim">
-            <div class="h">Claim your seat</div>
-            <div class="s">apply online, or call or text to register</div>
+            <div class="claim-h">Claim your seat</div>
+            <div class="claim-s">apply online in ~3 minutes, or call or text to register</div>
           </div>
           <a class="phone" href="tel:+14256775903">(425) 677-5903</a>
-          <div class="actions">
-            <a class="btn-ghost" href="tel:+14256775903">call or text</a>
-            <a class="btn" href="/apply">Reserve a seat →</a>
+          <div class="cta-actions">
+            <a class="btn btn-ghost" href="tel:+14256775903">Call or text</a>
+            <a class="btn btn-primary" href="/apply">Reserve a seat →</a>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-    </main>
+  </main>
 
-    <footer>
+  <footer>
+    <div class="wrap footer-in">
       <span>© 2026 Code Share Academy · learn to build, not just use.</span>
       <span>online · grades 6–8 · seattle &nbsp;·&nbsp; <a href="tel:+14256775903">(425) 677-5903</a></span>
-    </footer>
+    </div>
+  </footer>
 
-  </div>
 </body>
 </html>
