@@ -1,47 +1,55 @@
-# Code Share Academy — apply
+# Code Share Academy
 
-A short application form for the Code Share Academy fall cohort (AI + coding,
-grades 6–8). Single static page, styled to match the cohort flyer: midnight IDE
-aesthetic, one green accent, hairline structure, monospace chrome.
+Marketing site + application form for the Code Share Academy fall cohort — an
+AI + coding accelerator for grades 6–8. Midnight IDE aesthetic, full-width,
+deliberately *not* a generic AI-template look.
 
 ## Stack
 
-- Static `index.html` + `styles.css` + `app.js` — no build step.
-- Submissions go straight to Supabase from the browser via `@supabase/supabase-js`.
-- Hosted on Vercel.
+- **Vite + React 18** SPA, `react-router-dom` (`/` landing, `/apply` form).
+- **React Bits** `LetterGlitch` for the animated terminal background; a small
+  scroll-reveal and count-up are hand-rolled for reliability.
+- **Supabase** for application submissions.
+- Hosted on **Vercel** (SPA rewrite + security headers in `vercel.json`).
+
+```
+npm install
+npm run dev      # http://localhost:4310
+npm run build    # → dist/
+```
+
+## Structure
+
+- `src/pages/Home.jsx` — the landing page, composed from `src/lib/content.js`.
+- `src/pages/Apply.jsx` — the application form (lazy-loaded so Supabase only
+  ships on `/apply`).
+- `src/lib/content.js` — **all copy** lives here (one source of truth).
+- `src/components/` — `TopNav`, `CodeWindow`, `GlitchBackground`, `Reveal`,
+  `StatNumber`, `SiteFooter`.
+- `src/reactbits/LetterGlitch.jsx` — vendored React Bits background.
+- `src/index.css` — design system (tokens, sections, form).
 
 ## Data
 
-Rows land in `public.camp_application` in the `obsidian-codex-console` Supabase
-project. The table is **insert-only** for the `anon` / publishable key:
+Submissions land in `public.camp_application` in the `obsidian-codex-console`
+Supabase project. The table is **insert-only** for the publishable/anon key:
 
-- RLS is enabled; the single policy allows `INSERT` only.
-- `anon` / `authenticated` are granted `INSERT` and nothing else, so the
-  publishable key in `app.js` cannot read anyone's data back.
-- Field lengths and a basic email shape are enforced with `CHECK` constraints.
+- RLS enabled, single `INSERT` policy; `anon` is granted `INSERT` and nothing
+  else, so the publishable key in the browser cannot read anyone's data back.
+- Field-length + email-shape `CHECK` constraints guard against junk.
 
-To read applications, use the Supabase dashboard or the service-role key
-(never ship the service-role key to the browser).
+To read applications, use the Supabase dashboard or the service-role key (never
+ship the service-role key to the browser):
 
 ```sql
-select created_at, student_name, grade, experience, build_idea
-from public.camp_application
-order by created_at desc;
+select created_at, student_name, grade, experience, build_idea, motivation, parent_phone
+from public.camp_application order by created_at desc;
 ```
 
-## Local preview
+## Design notes
 
-It's plain static files — open `index.html`, or:
-
-```sh
-python3 -m http.server 8000
-# → http://localhost:8000
-```
-
-## Design
-
-The look is deliberately *not* the default Tailwind/AI-generated SaaS template:
-near-black ground (`#08090b`), a single GitHub-green accent (`#3fb950`) used on
-under ~2% of the page, 1px hairline borders, sharp corners, and a real type
-pairing — Bricolage Grotesque (display) · Public Sans (body) · IBM Plex Mono
-(chrome). The form is framed as a code editor with a numbered line per question.
+Near-black ground (`#08090b`), a single GitHub-green accent (`#3fb950`) used on
+a small fraction of the page, 1px hairline borders, sharp corners, and a real
+type pairing — Bricolage Grotesque (display) · Public Sans (body) · IBM Plex
+Mono (chrome). Scroll-reveals and the count-up fail open (content always ends
+visible / on its final value) and honor `prefers-reduced-motion`.
