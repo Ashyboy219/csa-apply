@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Apply — Code Share Academy</title>
-  <meta name="description" content="Apply for the Code Share Academy fall cohort. AI + coding for grades 6–8. 12 seats, first class free. Takes about three minutes." />
+  <title>Code Share Academy — build with AI, grades 6–8</title>
+  <meta name="description" content="A 9-week cohort for grades 6–8: go from total beginner to shipping a real AI project that's entirely yours. First class free, 12 seats. Online, Saturdays." />
   <meta name="color-scheme" content="dark" />
 
-  <meta property="og:title" content="Apply — Code Share Academy" />
-  <meta property="og:description" content="AI + coding for grades 6–8. Build a real project that's entirely yours. 12 seats, first class free." />
+  <meta property="og:title" content="Code Share Academy — build the passion project that gets you noticed" />
+  <meta property="og:description" content="AI + coding for grades 6–8. Ship a real project that's entirely yours. First class free · 12 seats." />
   <meta property="og:type" content="website" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,162 +19,129 @@
 <body>
   <div class="frame">
 
-    <!-- top bar — same grammar as the flyer header -->
     <header class="topbar">
       <div class="tb-left">
         <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span class="brand">CODE SHARE ACADEMY</span>
-        <span class="path">/ apply.md</span>
+        <a class="brand" href="/">CODE SHARE ACADEMY</a>
+        <span class="path">/ the-edge.md</span>
       </div>
       <div class="tb-right">
-        <span class="status"><span class="dot" aria-hidden="true"></span> fall cohort · 12 seats</span>
-        <span class="freebadge">1ST CLASS FREE</span>
+        <span class="status"><span class="dot" aria-hidden="true"></span> fall cohort · filling now</span>
+        <a class="freebadge" href="/apply">1ST CLASS FREE</a>
       </div>
     </header>
 
     <main>
-      <p class="eyebrow">// application · ai + coding · grades 6–8</p>
-      <h1 class="headline">Claim one of<br /><span class="accent">12 seats</span>.</h1>
-      <p class="lede">First class is free, then $25 a class — pay as you go. This takes about three minutes. A founder who actually ships AI reads <b>every single one</b>.</p>
+      <!-- hero -->
+      <p class="eyebrow">// ai + coding · grades 6–8 · beginners welcome</p>
+      <h1 class="headline">Build the passion project that makes everyone look your way.</h1>
+      <p class="lede">A 9-week cohort where you go from total beginner to shipping a real, working AI project that's <b>entirely yours</b> — the kind of standout work that gets you noticed, on an application and anywhere else.</p>
 
-      <!-- the form, framed as a code editor -->
-      <form class="editor" id="apply-form" novalidate>
+      <div class="hero-cta">
+        <a class="btn" href="/apply">Claim your seat →</a>
+        <span class="cta-note"><b>1st class free</b> · only 12 seats · ~3 min to apply</span>
+      </div>
+
+      <!-- the window -->
+      <section class="panel window-quote">
+        <p class="eyebrow">// the window</p>
+        <p>Every kid is about to <span class="muted">use</span> AI. The few who learn to <b>build</b> with it are the ones who get noticed.</p>
+      </section>
+
+      <!-- code editor window -->
+      <div class="editor" aria-label="Example student project">
         <div class="editor-bar">
           <span class="dots small" aria-hidden="true"><i></i><i></i><i></i></span>
-          <span class="tab">application.py <span class="x" aria-hidden="true">×</span></span>
+          <span class="tab">passion_project.py <span class="x" aria-hidden="true">×</span></span>
           <span class="editor-meta">~/future-coders ›&nbsp; UTF-8</span>
         </div>
-
-        <div class="editor-body">
-
-          <fieldset class="line">
-            <span class="ln" aria-hidden="true">01</span>
-            <div class="field">
-              <label for="student_name"># student's name<span class="req">*</span></label>
-              <input id="student_name" name="student_name" type="text" autocomplete="name"
-                     maxlength="120" required placeholder="first and last" />
-            </div>
-          </fieldset>
-
-          <fieldset class="line">
-            <span class="ln" aria-hidden="true">02</span>
-            <div class="field">
-              <label for="grade"># grade this fall<span class="req">*</span></label>
-              <select id="grade" name="grade" required>
-                <option value="" disabled selected hidden>select…</option>
-                <option value="6th grade">6th grade</option>
-                <option value="7th grade">7th grade</option>
-                <option value="8th grade">8th grade</option>
-                <option value="other">other (tell us below)</option>
-              </select>
-            </div>
-          </fieldset>
-
-          <fieldset class="line">
-            <span class="ln" aria-hidden="true">03</span>
-            <div class="field">
-              <label for="parent_name"># parent / guardian name<span class="req">*</span></label>
-              <input id="parent_name" name="parent_name" type="text" autocomplete="name"
-                     maxlength="120" required placeholder="who we'll be in touch with" />
-            </div>
-          </fieldset>
-
-          <fieldset class="line">
-            <span class="ln" aria-hidden="true">04</span>
-            <div class="field">
-              <label for="parent_phone"># parent phone <span class="hint">— we register by call or text</span><span class="req">*</span></label>
-              <input id="parent_phone" name="parent_phone" type="tel" autocomplete="tel"
-                     maxlength="40" required placeholder="(425) 555-0123" />
-            </div>
-          </fieldset>
-
-          <fieldset class="line">
-            <span class="ln" aria-hidden="true">05</span>
-            <div class="field">
-              <label for="parent_email"># parent email<span class="req">*</span></label>
-              <input id="parent_email" name="parent_email" type="email" autocomplete="email"
-                     maxlength="200" required placeholder="you@example.com" />
-            </div>
-          </fieldset>
-
-          <fieldset class="line">
-            <span class="ln" aria-hidden="true">06</span>
-            <div class="field">
-              <label># how much has the student coded?<span class="req">*</span></label>
-              <div class="segmented" role="radiogroup" aria-label="Coding experience">
-                <label>
-                  <input type="radio" name="experience" value="Total beginner" required />
-                  <span class="opt">Total beginner<small>never written code</small></span>
-                </label>
-                <label>
-                  <input type="radio" name="experience" value="Tinkered a bit" />
-                  <span class="opt">Tinkered a bit<small>Scratch, a class, YouTube</small></span>
-                </label>
-                <label>
-                  <input type="radio" name="experience" value="Built things before" />
-                  <span class="opt">Built things<small>finished a project or two</small></span>
-                </label>
-              </div>
-            </div>
-          </fieldset>
-
-          <fieldset class="line">
-            <span class="ln" aria-hidden="true">07</span>
-            <div class="field">
-              <label for="build_idea"># if you could build ONE thing with AI, what would it be?<span class="req">*</span></label>
-              <textarea id="build_idea" name="build_idea" maxlength="2000" required
-                        placeholder="a game, an app for your class, a bot that does your chores — anything. doesn't have to be realistic."></textarea>
-            </div>
-          </fieldset>
-
-          <fieldset class="line">
-            <span class="ln" aria-hidden="true">08</span>
-            <div class="field">
-              <label for="motivation"># why do you want in? <span class="hint">— a sentence or two is plenty</span><span class="req">*</span></label>
-              <textarea id="motivation" name="motivation" maxlength="2000" required
-                        placeholder="what's pulling you to this?"></textarea>
-            </div>
-          </fieldset>
-
-          <fieldset class="line">
-            <span class="ln" aria-hidden="true">09</span>
-            <div class="field">
-              <label for="availability"># Saturdays 11:30–12:30, Jul 25 – Sep 26<span class="req">*</span></label>
-              <select id="availability" name="availability" required>
-                <option value="" disabled selected hidden>select…</option>
-                <option value="Yes — all of them">Yes — I can make all of them</option>
-                <option value="Most of them">Most of them</option>
-                <option value="Not sure yet">Not sure yet</option>
-              </select>
-            </div>
-          </fieldset>
-
-          <fieldset class="line">
-            <span class="ln" aria-hidden="true">10</span>
-            <div class="field">
-              <label for="heard_from"># how'd you hear about us? <span class="hint">— optional</span></label>
-              <input id="heard_from" name="heard_from" type="text" maxlength="200"
-                     placeholder="a friend, school, instagram…" />
-            </div>
-          </fieldset>
-
+        <div class="code">
+          <div class="row"><span class="gut">1</span><span><span class="cm"># passion_project.py — shipped in week 7</span></span></div>
+          <div class="row"><span class="gut">2</span><span><span class="kw">from</span> studio <span class="kw">import</span> Agent, ship</span></div>
+          <div class="row"><span class="gut">3</span><span>idea = <span class="str">"an app that quizzes my class on anything"</span></span></div>
+          <div class="row"><span class="gut">4</span><span>app = <span class="fn">Agent</span>(idea).<span class="fn">build</span>()   <span class="cm"># describe it → AI writes the code</span></span></div>
+          <div class="row"><span class="gut">5</span><span><span class="fn">ship</span>(app)                <span class="cm"># live, shareable, and entirely theirs</span></span></div>
+          <div class="row"><span class="gut">6</span><span><span class="cm"># reviewed by a founder who ships real AI </span><span class="ok">✓</span></span></div>
         </div>
-
-        <div class="form-error" id="form-error" role="alert"></div>
-
-        <div class="submit-row">
-          <button class="submit" type="submit" id="submit-btn">Submit application →</button>
-          <span class="submit-note">no account · no payment · just hit send</span>
-        </div>
-
         <div class="statusbar" aria-hidden="true">
-          <span class="sb-dot"></span>
-          <span id="sb-state">ready</span>
+          <span class="sb-dot"></span><span>shipped</span>
           <span class="sep">·</span><span>main</span>
-          <span class="sep">·</span><span>12 seats left</span>
-          <span class="sb-right">we read every one</span>
+          <span class="sep">·</span><span>Python</span>
+          <span class="sep">·</span><span>built by a 7th grader</span>
+          <span class="sb-right">Ln 9, Col 41</span>
         </div>
-      </form>
+      </div>
+
+      <!-- specs -->
+      <div class="specs">
+        <div class="spec"><div class="k">When</div><div class="v">10 Saturdays<small>Jul 25 – Sep 26</small></div></div>
+        <div class="spec"><div class="k">Time</div><div class="v">11:30 – 12:30<small>Pacific</small></div></div>
+        <div class="spec"><div class="k">Where</div><div class="v">Online<small>live on Zoom</small></div></div>
+        <div class="spec"><div class="k">Who</div><div class="v">Grades 6–8<small>beginners welcome</small></div></div>
+      </div>
+
+      <!-- Claude Max callout -->
+      <p class="callout">Every student builds on <b>Claude Max</b> — the same $100/mo frontier AI that working developers ship with — included for the entire cohort.</p>
+
+      <!-- curriculum -->
+      <p class="section-label">// the-edge.md</p>
+      <div class="weeks">
+        <div class="week"><span class="n">01</span><span class="t">Welcome to the AI age</span></div>
+        <div class="week"><span class="n">02</span><span class="t">How computers actually think</span></div>
+        <div class="week"><span class="n">03</span><span class="t">Real code — intro to Python</span></div>
+        <div class="week"><span class="n">04</span><span class="t">Prompt to product: build by describing</span></div>
+        <div class="week"><span class="n">05</span><span class="t">What is machine learning?</span></div>
+        <div class="week"><span class="n">06</span><span class="t">Inside the chatbot</span></div>
+        <div class="week"><span class="n">07</span><span class="t">Build your project · part 1</span></div>
+        <div class="week"><span class="n">08</span><span class="t">Build your project · part 2</span></div>
+        <div class="week last"><span class="n">09</span><span class="t">Showcase &amp; your future</span></div>
+      </div>
+
+      <!-- payoff -->
+      <section class="panel payoff">
+        <p class="eyebrow">// the payoff</p>
+        <p>A real, finished project to show — a standout for any portfolio, application, or interview down the road.</p>
+        <p class="meta">
+          <b>tools</b> — Scratch · Teachable Machine · Replit · Claude / ChatGPT / Gemini.<br />
+          <b>nothing to install</b> — it all runs in the browser.
+        </p>
+      </section>
+
+      <!-- who's teaching -->
+      <p class="section-label">// who's teaching</p>
+      <div class="teachers">
+        <div class="teacher"><span class="av" aria-hidden="true">AN</span><div><div class="nm">Ashish Naik</div><div class="ro">instructor</div></div></div>
+        <div class="teacher"><span class="av" aria-hidden="true">AG</span><div><div class="nm">Arnav Gollapally</div><div class="ro">instructor</div></div></div>
+        <div class="teacher"><span class="av" aria-hidden="true">SD</span><div><div class="nm">Shaurya Duggal</div><div class="ro">instructor</div></div></div>
+      </div>
+      <p class="credit">Led by <b>1st-place TiE Global Pitch Competition winners</b> — founders shipping real AI products today. Your child learns from people building the thing, not teaching from a textbook. Every dollar funds a local nonprofit.</p>
+      <p class="sources">
+        <a href="https://www.geekwire.com/2026/students-pitch-startups-in-regional-tie-young-entrepreneurs-finals-vying-to-three-peat-in-global-contest/" target="_blank" rel="noopener noreferrer">GeekWire</a>
+        <span class="sep">·</span>
+        <a href="https://www.linkedin.com/posts/tie-seattle_tyeseattle-tyeglobal-duggai-activity-7473807275753623552-PwHP" target="_blank" rel="noopener noreferrer">TiE Seattle</a>
+        <span class="sep">·</span>
+        <a href="https://duggai.com" target="_blank" rel="noopener noreferrer">duggai.com</a>
+      </p>
+
+      <!-- final CTA -->
+      <section class="cta-band">
+        <div class="cta-head">
+          <h2>First class — free.</h2>
+          <span class="freebadge">ONLY 12 SEATS</span>
+        </div>
+        <p class="sub">Then $25 per class, pay as you go. No package, no pressure.</p>
+        <div class="cta-foot">
+          <div class="claim">
+            <div class="h">Claim your seat</div>
+            <div class="s">apply online, or call / text to register</div>
+          </div>
+          <a class="phone" href="tel:+14256775903">(425) 677-5903</a>
+          <div class="actions">
+            <a class="btn-ghost" href="tel:+14256775903">call or text</a>
+            <a class="btn" href="/apply">Reserve a seat →</a>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer>
@@ -183,7 +150,5 @@
     </footer>
 
   </div>
-
-  <script type="module" src="app.js"></script>
 </body>
 </html>

@@ -359,3 +359,223 @@ footer a:hover { color: var(--text); }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
 }
+
+/* ============================================================
+   FLYER LANDING PAGE (index.html)
+   Reuses the tokens, topbar, editor window, footer and button
+   from the form above; everything below is flyer-specific.
+   ============================================================ */
+
+/* clickable brand / path in the top bar */
+a.brand { text-decoration: none; }
+a.path  { text-decoration: none; transition: color 0.12s var(--ease); }
+a.path:hover  { color: var(--muted); }
+a.brand:hover { color: #fff; }
+
+/* hero CTA row under the lede */
+.hero-cta {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin: -16px 0 4px;
+}
+.cta-note { font-family: var(--mono); font-size: 12px; color: var(--dim); }
+.cta-note b { color: var(--accent); font-weight: 500; }
+
+/* a link styled as the white primary button */
+a.btn {
+  display: inline-block;
+  font-family: var(--body);
+  font-weight: 600;
+  font-size: 15px;
+  color: #0b0c0f;
+  background: #f2f3f5;
+  border: 1px solid #f2f3f5;
+  border-radius: 2px;
+  padding: 12px 20px;
+  text-decoration: none;
+  transition: transform 0.12s var(--ease), background 0.12s var(--ease);
+}
+a.btn:hover  { background: #fff; }
+a.btn:active { transform: translateY(1px); }
+
+/* a link styled as a ghost/outline button */
+a.btn-ghost {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 11px 16px;
+  text-decoration: none;
+  transition: border-color 0.12s var(--ease), color 0.12s var(--ease);
+}
+a.btn-ghost:hover { border-color: var(--accent-line); color: var(--accent); }
+
+/* generic flyer panel (the "// THE WINDOW", payoff, etc.) */
+.panel {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: 22px 24px;
+  margin: 34px 0;
+}
+.panel .eyebrow { margin-bottom: 12px; }
+.panel.window-quote p {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--text);
+}
+.panel.window-quote .muted { color: var(--dim); }
+
+/* section heading label */
+.section-label {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin: 56px 0 18px;
+}
+
+/* ---- code window (flyer hero listing) ---- */
+.code {
+  font-family: var(--mono);
+  font-size: 13.5px;
+  line-height: 1.85;
+  padding: 18px 0;
+  overflow-x: auto;
+}
+.code .row { display: grid; grid-template-columns: 48px 1fr; white-space: pre; }
+.code .gut { color: var(--dim); text-align: right; padding-right: 18px; user-select: none; }
+.code .cm  { color: var(--dim); }
+.code .kw  { color: var(--kw); }
+.code .str { color: var(--str); }
+.code .fn  { color: var(--fn); }
+.code .ok  { color: var(--accent); }
+
+/* ---- specs grid: WHEN / TIME / WHERE / WHO ---- */
+.specs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border: 1px solid var(--line);
+  margin: 34px 0;
+}
+.spec { padding: 18px 20px; border-left: 1px solid var(--line-soft); }
+.spec:first-child { border-left: 0; }
+.spec .k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; color: var(--dim); text-transform: uppercase; }
+.spec .v { margin-top: 7px; font-size: 15px; color: var(--text); font-weight: 500; }
+.spec .v small { display: block; color: var(--muted); font-weight: 400; font-size: 13px; margin-top: 2px; }
+
+/* ---- Claude Max callout ---- */
+.callout {
+  border-left: 2px solid var(--accent-line);
+  padding: 6px 0 6px 20px;
+  margin: 34px 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.55;
+}
+.callout b { color: var(--text); font-weight: 600; }
+
+/* ---- curriculum weeks ---- */
+.weeks { border-top: 1px solid var(--line-soft); }
+.week {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 4px;
+  padding: 13px 4px;
+  border-bottom: 1px solid var(--line-soft);
+  align-items: baseline;
+}
+.week .n { font-family: var(--mono); font-size: 13px; color: var(--dim); }
+.week .t { font-size: 15.5px; color: var(--text); }
+.week.last .t { color: var(--accent); font-weight: 600; }
+.week.last .n { color: var(--accent); }
+
+/* ---- payoff / tools ---- */
+.payoff p { margin: 0 0 14px; font-size: 16px; color: var(--text); }
+.payoff .meta { font-family: var(--mono); font-size: 13px; color: var(--muted); line-height: 1.7; }
+.payoff .meta b { color: var(--text); font-weight: 500; }
+
+/* ---- instructors ---- */
+.teachers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 18px 0 22px;
+}
+.teacher {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--line);
+  padding: 14px;
+}
+.teacher .av {
+  width: 38px; height: 38px; flex: none;
+  display: grid; place-items: center;
+  font-family: var(--mono); font-size: 12px; color: var(--muted);
+  background: var(--surface-2); border: 1px solid var(--line);
+}
+.teacher .nm { font-size: 14.5px; font-weight: 600; color: var(--text); }
+.teacher .ro { font-family: var(--mono); font-size: 11px; color: var(--dim); margin-top: 1px; }
+
+.credit { color: var(--muted); font-size: 15px; line-height: 1.6; max-width: 62ch; }
+.credit b { color: var(--text); font-weight: 600; }
+
+/* subtle source links under the credit line — citations, not bragging */
+.sources {
+  margin-top: 12px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--dim);
+}
+.sources a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--line); padding-bottom: 1px; transition: color 0.12s var(--ease), border-color 0.12s var(--ease); }
+.sources a:hover { color: var(--accent); border-color: var(--accent-line); }
+.sources .sep { color: #2a2d34; margin: 0 8px; }
+
+/* ---- final CTA band ---- */
+.cta-band {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  padding: 30px;
+  margin: 56px 0 10px;
+}
+.cta-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.cta-head h2 {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(28px, 5vw, 38px);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.cta-band .sub { color: var(--muted); margin: 8px 0 24px; font-size: 16px; }
+.cta-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 18px; flex-wrap: wrap;
+  border-top: 1px solid var(--line); padding-top: 22px;
+}
+.cta-foot .claim .h { font-weight: 600; color: var(--text); }
+.cta-foot .claim .s { font-family: var(--mono); font-size: 12px; color: var(--dim); }
+.cta-foot .phone {
+  font-family: var(--display); font-weight: 700; font-size: clamp(22px, 4vw, 30px);
+  color: var(--text); text-decoration: none; letter-spacing: -0.01em;
+}
+.cta-foot .phone:hover { color: var(--accent); }
+.cta-foot .actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+
+@media (max-width: 620px) {
+  .specs { grid-template-columns: repeat(2, 1fr); }
+  .spec:nth-child(3) { border-left: 0; }
+  .spec:nth-child(odd) { border-left: 0; }
+  .spec { border-top: 1px solid var(--line-soft); }
+  .spec:nth-child(-n+2) { border-top: 0; }
+  .teachers { grid-template-columns: 1fr; }
+}
