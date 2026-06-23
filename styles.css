@@ -44,12 +44,6 @@ body {
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  /* faint 1px grid, like the flyer's plotting-paper ground */
-  background-image:
-    linear-gradient(var(--line-soft) 1px, transparent 1px),
-    linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
-  background-size: 56px 56px;
-  background-position: -1px -1px;
 }
 
 /* ---- page frame -------------------------------------------------------- */
@@ -97,12 +91,14 @@ body {
 .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); display: inline-block; }
 
 .freebadge {
-  color: var(--accent);
-  border: 1px solid var(--accent-line);
+  color: var(--muted);
+  border: 1px solid var(--line);
   padding: 4px 9px;
   letter-spacing: 0.1em;
   white-space: nowrap;
 }
+/* green only earns its place on scarcity + the passion-project line */
+.freebadge.g { color: var(--accent); border-color: var(--accent-line); }
 
 /* ---- hero -------------------------------------------------------------- */
 
@@ -381,7 +377,7 @@ a.brand:hover { color: #fff; }
   margin: -16px 0 4px;
 }
 .cta-note { font-family: var(--mono); font-size: 12px; color: var(--dim); }
-.cta-note b { color: var(--accent); font-weight: 500; }
+.cta-note b { color: var(--text); font-weight: 500; }
 
 /* a link styled as the white primary button */
 a.btn {
@@ -436,7 +432,7 @@ a.btn-ghost:hover { border-color: var(--accent-line); color: var(--accent); }
   font-family: var(--mono);
   font-size: 12px;
   letter-spacing: 0.14em;
-  color: var(--accent);
+  color: var(--muted);
   text-transform: uppercase;
   margin: 56px 0 18px;
 }
@@ -470,17 +466,6 @@ a.btn-ghost:hover { border-color: var(--accent-line); color: var(--accent); }
 .spec .v { margin-top: 7px; font-size: 15px; color: var(--text); font-weight: 500; }
 .spec .v small { display: block; color: var(--muted); font-weight: 400; font-size: 13px; margin-top: 2px; }
 
-/* ---- Claude Max callout ---- */
-.callout {
-  border-left: 2px solid var(--accent-line);
-  padding: 6px 0 6px 20px;
-  margin: 34px 0;
-  color: var(--muted);
-  font-size: 16px;
-  line-height: 1.55;
-}
-.callout b { color: var(--text); font-weight: 600; }
-
 /* ---- curriculum weeks ---- */
 .weeks { border-top: 1px solid var(--line-soft); }
 .week {
@@ -493,8 +478,8 @@ a.btn-ghost:hover { border-color: var(--accent-line); color: var(--accent); }
 }
 .week .n { font-family: var(--mono); font-size: 13px; color: var(--dim); }
 .week .t { font-size: 15.5px; color: var(--text); }
-.week.last .t { color: var(--accent); font-weight: 600; }
-.week.last .n { color: var(--accent); }
+.week.last .t { color: var(--text); font-weight: 600; }
+.week.last .n { color: var(--dim); }
 
 /* ---- payoff / tools ---- */
 .payoff p { margin: 0 0 14px; font-size: 16px; color: var(--text); }
@@ -605,8 +590,8 @@ a.btn-ghost:hover { border-color: var(--accent-line); color: var(--accent); }
   padding-left: 40px;
   padding-right: 40px;
 }
-.site .freebadge { transition: color 0.12s var(--ease), border-color 0.12s var(--ease), background 0.12s var(--ease); }
-.site a.freebadge:hover { background: var(--accent-dim); border-color: var(--accent); }
+.site .freebadge { transition: color 0.12s var(--ease), border-color 0.12s var(--ease); }
+.site a.freebadge:hover { color: var(--text); border-color: rgba(255, 255, 255, 0.22); }
 
 .site main { padding: 64px 56px 56px; }
 
@@ -641,9 +626,9 @@ a.btn-ghost:hover { border-color: var(--accent-line); color: var(--accent); }
 .site .hero .lede { font-size: 17.5px; max-width: 52ch; margin-bottom: 32px; }
 .site .hero-cta { margin: 0; }
 
-/* the project window, lifted to be a hero object with a little depth */
+/* the project window, lifted just enough to read as a hero object */
 .site .hero-window .editor {
-  box-shadow: 0 30px 80px -40px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 12px 36px -22px rgba(0, 0, 0, 0.85);
 }
 .site .hero-window .code { font-size: 13px; }
 
@@ -672,36 +657,43 @@ a.btn-ghost:hover { border-color: var(--accent-line); color: var(--accent); }
   max-width: 26ch;
 }
 .site .statement .big .muted { color: var(--dim); }
-.site .statement .big b { color: var(--accent); font-weight: 700; }
+.site .statement .big b { color: var(--text); font-weight: 800; }
 .site .statement .sub { color: var(--muted); font-size: 16px; margin: 0; max-width: 60ch; }
 
-/* ---- Claude Max: the headline value, impossible to skim past ---- */
+/* ---- Claude Max: the tool is the headline, not the price ---- */
 .site .maxfeature {
   display: grid;
-  grid-template-columns: 0.9fr 1.1fr;
+  grid-template-columns: 0.95fr 1.05fr;
   gap: 48px;
-  align-items: center;
-  border: 1px solid var(--accent-line);
-  background:
-    radial-gradient(120% 140% at 0% 0%, var(--accent-dim), transparent 60%),
-    var(--surface);
+  align-items: start;
+  border: 1px solid var(--line);
+  background: var(--surface);
   padding: 40px 44px;
   margin: 48px 0;
 }
-.site .maxfeature .eyebrow { margin-bottom: 14px; }
-.site .maxfeature .price {
+.site .maxfeature .eyebrow { margin-bottom: 16px; }
+.site .maxfeature .mf-title {
   font-family: var(--display);
   font-weight: 800;
-  font-size: clamp(54px, 8vw, 88px);
-  line-height: 0.92;
-  letter-spacing: -0.03em;
-  margin-bottom: 14px;
+  font-size: clamp(26px, 3.1vw, 40px);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  margin: 0;
+  max-width: 16ch;
 }
-.site .maxfeature .price .per { font-size: 0.34em; font-weight: 700; letter-spacing: 0; }
-.site .maxfeature .price-label { color: var(--muted); font-size: 16px; line-height: 1.5; margin: 0; max-width: 40ch; }
-.site .maxfeature .price-label .g { font-weight: 600; }
-.site .maxfeature .mf-right p { color: var(--text); font-size: 16.5px; line-height: 1.55; margin: 0 0 14px; }
-.site .maxfeature .mf-note { color: var(--muted) !important; font-size: 15px !important; border-left: 2px solid var(--accent-line); padding-left: 16px; }
+.site .maxfeature .mf-lead {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 12px;
+}
+.site .maxfeature .mf-body {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 52ch;
+}
 
 /* ---- curriculum: a grid of weeks instead of a long thin list ---- */
 .site .curriculum-head {
@@ -748,7 +740,7 @@ a.btn-ghost:hover { border-color: var(--accent-line); color: var(--accent); }
 .site .payoff .lead { font-family: var(--display); font-weight: 700; font-size: clamp(20px, 2.4vw, 26px); line-height: 1.3; letter-spacing: -0.015em; margin: 0; }
 .site .payoff-tools { border-left: 1px solid var(--line); padding-left: 40px; }
 .site .payoff-tools .meta { font-family: var(--mono); font-size: 12.5px; color: var(--muted); line-height: 1.7; margin: 0; }
-.site .payoff-tools .meta b { color: var(--accent); font-weight: 500; }
+.site .payoff-tools .meta b { color: var(--text); font-weight: 600; }
 
 /* ---- final CTA band ---- */
 .site .cta-band { margin: 56px 0 12px; padding: 40px 44px; }
@@ -774,5 +766,4 @@ a.btn-ghost:hover { border-color: var(--accent-line); color: var(--accent); }
   .site .topbar { padding-left: 16px; padding-right: 16px; }
   .site .weeks { grid-template-columns: 1fr; }
   .site .cta-band { padding: 28px 22px; }
-  .site .maxfeature .price { font-size: clamp(48px, 16vw, 72px); }
 }
