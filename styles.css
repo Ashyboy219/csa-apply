@@ -96,6 +96,7 @@ body {
   padding: 4px 9px;
   letter-spacing: 0.1em;
   white-space: nowrap;
+  text-decoration: none;
 }
 /* green only earns its place on scarcity + the passion-project line */
 .freebadge.g { color: var(--accent); border-color: var(--accent-line); }
