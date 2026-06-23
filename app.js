@@ -35,7 +35,7 @@ form.addEventListener("submit", async (event) => {
   if (!form.checkValidity()) {
     const firstInvalid = form.querySelector(":invalid");
     if (firstInvalid) firstInvalid.focus();
-    showError("A few fields still need answers — check the highlighted lines.");
+    showError("A few fields still need answers. Check the highlighted lines.");
     return;
   }
 
@@ -95,7 +95,7 @@ function renderSuccess(payload) {
       <span class="sb-dot"></span><span>saved</span>
       <span class="sep">·</span><span>main</span>
       <span class="sep">·</span><span>see you Saturday</span>
-      <span class="sb-right">first class — free</span>
+      <span class="sb-right">first class, free</span>
     </div>`;
 
   editor.scrollIntoView({ behavior: "smooth", block: "start" });
