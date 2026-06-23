@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Apply — Code Share Academy</title>
+  <meta name="description" content="Apply for the Code Share Academy fall cohort. AI + coding for grades 6–8. 12 seats, first class free. Takes about three minutes." />
+  <meta name="color-scheme" content="dark" />
+
+  <meta property="og:title" content="Apply — Code Share Academy" />
+  <meta property="og:description" content="AI + coding for grades 6–8. Build a real project that's entirely yours. 12 seats, first class free." />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="frame">
+
+    <!-- top bar — same grammar as the flyer header -->
+    <header class="topbar">
+      <div class="tb-left">
+        <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="brand">CODE SHARE ACADEMY</span>
+        <span class="path">/ apply.md</span>
+      </div>
+      <div class="tb-right">
+        <span class="status"><span class="dot" aria-hidden="true"></span> fall cohort · 12 seats</span>
+        <span class="freebadge">1ST CLASS FREE</span>
+      </div>
+    </header>
+
+    <main>
+      <p class="eyebrow">// application · ai + coding · grades 6–8</p>
+      <h1 class="headline">Claim one of<br /><span class="accent">12 seats</span>.</h1>
+      <p class="lede">First class is free, then $25 a class — pay as you go. This takes about three minutes. A founder who actually ships AI reads <b>every single one</b>.</p>
+
+      <!-- the form, framed as a code editor -->
+      <form class="editor" id="apply-form" novalidate>
+        <div class="editor-bar">
+          <span class="dots small" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="tab">application.py <span class="x" aria-hidden="true">×</span></span>
+          <span class="editor-meta">~/future-coders ›&nbsp; UTF-8</span>
+        </div>
+
+        <div class="editor-body">
+
+          <fieldset class="line">
+            <span class="ln" aria-hidden="true">01</span>
+            <div class="field">
+              <label for="student_name"># student's name<span class="req">*</span></label>
+              <input id="student_name" name="student_name" type="text" autocomplete="name"
+                     maxlength="120" required placeholder="first and last" />
+            </div>
+          </fieldset>
+
+          <fieldset class="line">
+            <span class="ln" aria-hidden="true">02</span>
+            <div class="field">
+              <label for="grade"># grade this fall<span class="req">*</span></label>
+              <select id="grade" name="grade" required>
+                <option value="" disabled selected hidden>select…</option>
+                <option value="6th grade">6th grade</option>
+                <option value="7th grade">7th grade</option>
+                <option value="8th grade">8th grade</option>
+                <option value="other">other (tell us below)</option>
+              </select>
+            </div>
+          </fieldset>
+
+          <fieldset class="line">
+            <span class="ln" aria-hidden="true">03</span>
+            <div class="field">
+              <label for="parent_name"># parent / guardian name<span class="req">*</span></label>
+              <input id="parent_name" name="parent_name" type="text" autocomplete="name"
+                     maxlength="120" required placeholder="who we'll be in touch with" />
+            </div>
+          </fieldset>
+
+          <fieldset class="line">
+            <span class="ln" aria-hidden="true">04</span>
+            <div class="field">
+              <label for="parent_phone"># parent phone <span class="hint">— we register by call or text</span><span class="req">*</span></label>
+              <input id="parent_phone" name="parent_phone" type="tel" autocomplete="tel"
+                     maxlength="40" required placeholder="(425) 555-0123" />
+            </div>
+          </fieldset>
+
+          <fieldset class="line">
+            <span class="ln" aria-hidden="true">05</span>
+            <div class="field">
+              <label for="parent_email"># parent email<span class="req">*</span></label>
+              <input id="parent_email" name="parent_email" type="email" autocomplete="email"
+                     maxlength="200" required placeholder="you@example.com" />
+            </div>
+          </fieldset>
+
+          <fieldset class="line">
+            <span class="ln" aria-hidden="true">06</span>
+            <div class="field">
+              <label># how much has the student coded?<span class="req">*</span></label>
+              <div class="segmented" role="radiogroup" aria-label="Coding experience">
+                <label>
+                  <input type="radio" name="experience" value="Total beginner" required />
+                  <span class="opt">Total beginner<small>never written code</small></span>
+                </label>
+                <label>
+                  <input type="radio" name="experience" value="Tinkered a bit" />
+                  <span class="opt">Tinkered a bit<small>Scratch, a class, YouTube</small></span>
+                </label>
+                <label>
+                  <input type="radio" name="experience" value="Built things before" />
+                  <span class="opt">Built things<small>finished a project or two</small></span>
+                </label>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="line">
+            <span class="ln" aria-hidden="true">07</span>
+            <div class="field">
+              <label for="build_idea"># if you could build ONE thing with AI, what would it be?<span class="req">*</span></label>
+              <textarea id="build_idea" name="build_idea" maxlength="2000" required
+                        placeholder="a game, an app for your class, a bot that does your chores — anything. doesn't have to be realistic."></textarea>
+            </div>
+          </fieldset>
+
+          <fieldset class="line">
+            <span class="ln" aria-hidden="true">08</span>
+            <div class="field">
+              <label for="motivation"># why do you want in? <span class="hint">— a sentence or two is plenty</span><span class="req">*</span></label>
+              <textarea id="motivation" name="motivation" maxlength="2000" required
+                        placeholder="what's pulling you to this?"></textarea>
+            </div>
+          </fieldset>
+
+          <fieldset class="line">
+            <span class="ln" aria-hidden="true">09</span>
+            <div class="field">
+              <label for="availability"># Saturdays 11:30–12:30, Jul 25 – Sep 26<span class="req">*</span></label>
+              <select id="availability" name="availability" required>
+                <option value="" disabled selected hidden>select…</option>
+                <option value="Yes — all of them">Yes — I can make all of them</option>
+                <option value="Most of them">Most of them</option>
+                <option value="Not sure yet">Not sure yet</option>
+              </select>
+            </div>
+          </fieldset>
+
+          <fieldset class="line">
+            <span class="ln" aria-hidden="true">10</span>
+            <div class="field">
+              <label for="heard_from"># how'd you hear about us? <span class="hint">— optional</span></label>
+              <input id="heard_from" name="heard_from" type="text" maxlength="200"
+                     placeholder="a friend, school, instagram…" />
+            </div>
+          </fieldset>
+
+        </div>
+
+        <div class="form-error" id="form-error" role="alert"></div>
+
+        <div class="submit-row">
+          <button class="submit" type="submit" id="submit-btn">Submit application →</button>
+          <span class="submit-note">no account · no payment · just hit send</span>
+        </div>
+
+        <div class="statusbar" aria-hidden="true">
+          <span class="sb-dot"></span>
+          <span id="sb-state">ready</span>
+          <span class="sep">·</span><span>main</span>
+          <span class="sep">·</span><span>12 seats left</span>
+          <span class="sb-right">we read every one</span>
+        </div>
+      </form>
+    </main>
+
+    <footer>
+      <span>© 2026 Code Share Academy — learn to build, not just use.</span>
+      <span>online · grades 6–8 · seattle &nbsp;·&nbsp; <a href="tel:+14256775903">(425) 677-5903</a></span>
+    </footer>
+
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
