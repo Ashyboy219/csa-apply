@@ -4,11 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Apply · Code Share Academy</title>
-  <meta name="description" content="Apply for the Code Share Academy fall cohort. AI + coding for curious beginners. Seats limited, first class free. Takes about three minutes." />
+  <meta name="description" content="Apply for the Code Share Academy fall cohort. Ship a real AI project that's entirely yours, mentored by founders who win pitch competitions. Seats limited, scholarships awarded from applications. Takes about three minutes." />
   <meta name="color-scheme" content="dark" />
 
   <meta property="og:title" content="Apply · Code Share Academy" />
-  <meta property="og:description" content="AI + coding for curious beginners. Build a real project that's entirely yours. Seats limited, first class free." />
+  <meta property="og:description" content="Ship a real AI project that's entirely yours, mentored like an accelerator by founders who win pitch competitions. Seats limited, scholarships awarded from applications." />
   <meta property="og:type" content="website" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -28,7 +28,7 @@
       </a>
       <div class="nav-right">
         <a class="status status-link" href="/">← overview</a>
-        <span class="badge-free static">1ST&nbsp;CLASS&nbsp;FREE</span>
+        <span class="badge-free static">FALL&nbsp;COHORT&nbsp;·&nbsp;12&nbsp;SEATS</span>
       </div>
     </div>
   </header>
@@ -37,7 +37,7 @@
     <div class="wrap apply-wrap">
       <p class="eyebrow">// application · ai + coding</p>
       <h1 class="headline apply-headline">Claim your <span class="accent">seat</span>.</h1>
-      <p class="lede">Seats are limited and we take a small cohort on purpose. First class is free, then $25 a class, pay as you go. This takes about three minutes, and a founder who actually ships AI reads <b>every single one</b>.</p>
+      <p class="lede">Ten Saturdays, online. You ship a real AI project that's <b>entirely yours</b> — the kind you put your name on. We run it like an accelerator: founders who ship AI and win pitch competitions, mentoring you the whole way. <b>$225 for the cohort</b>, and we award a few <b>scholarship seats</b> straight from the applications. Three minutes, and one of us reads <b>every single one</b>.</p>
 
       <!-- the form, framed as a code editor -->
       <form class="editor form-editor" id="apply-form" novalidate>
@@ -52,7 +52,7 @@
           <fieldset class="line">
             <span class="ln" aria-hidden="true">01</span>
             <div class="field">
-              <label for="student_name"># student's name<span class="req">*</span></label>
+              <label for="student_name"># your name<span class="req">*</span></label>
               <input id="student_name" name="student_name" type="text" autocomplete="name"
                      maxlength="120" required placeholder="first and last" />
             </div>
@@ -75,34 +75,7 @@
           <fieldset class="line">
             <span class="ln" aria-hidden="true">03</span>
             <div class="field">
-              <label for="parent_name"># parent / guardian name<span class="req">*</span></label>
-              <input id="parent_name" name="parent_name" type="text" autocomplete="name"
-                     maxlength="120" required placeholder="who we'll be in touch with" />
-            </div>
-          </fieldset>
-
-          <fieldset class="line">
-            <span class="ln" aria-hidden="true">04</span>
-            <div class="field">
-              <label for="parent_phone"># parent phone <span class="hint">(we register by call or text)</span><span class="req">*</span></label>
-              <input id="parent_phone" name="parent_phone" type="tel" autocomplete="tel"
-                     maxlength="40" required placeholder="(425) 555-0123" />
-            </div>
-          </fieldset>
-
-          <fieldset class="line">
-            <span class="ln" aria-hidden="true">05</span>
-            <div class="field">
-              <label for="parent_email"># parent email<span class="req">*</span></label>
-              <input id="parent_email" name="parent_email" type="email" autocomplete="email"
-                     maxlength="200" required placeholder="you@example.com" />
-            </div>
-          </fieldset>
-
-          <fieldset class="line">
-            <span class="ln" aria-hidden="true">06</span>
-            <div class="field">
-              <label># how much has the student coded?<span class="req">*</span></label>
+              <label># how much have you coded?<span class="req">*</span></label>
               <div class="segmented" role="radiogroup" aria-label="Coding experience">
                 <label>
                   <input type="radio" name="experience" value="Total beginner" required />
@@ -114,40 +87,69 @@
                 </label>
                 <label>
                   <input type="radio" name="experience" value="Built things before" />
-                  <span class="opt">Built things<small>finished a project or two</small></span>
+                  <span class="opt">Built things<small>shipped a project or two</small></span>
                 </label>
               </div>
             </div>
           </fieldset>
 
           <fieldset class="line">
-            <span class="ln" aria-hidden="true">07</span>
+            <span class="ln" aria-hidden="true">04</span>
             <div class="field">
-              <label for="build_idea"># if you could build ONE thing with AI, what would it be?<span class="req">*</span></label>
+              <label for="build_idea"># what do you want to build?<span class="req">*</span></label>
+              <p class="blockhint">this becomes your real project — the one that's yours, the one you present at the showcase.</p>
               <textarea id="build_idea" name="build_idea" maxlength="2000" required
-                        placeholder="a game, an app for your class, a bot that does your chores. anything, and it doesn't have to be realistic."></textarea>
+                        placeholder="a problem you'd actually want to solve, an app you wish existed, a tool that'd make something easier. think bigger than a school assignment — something you'd put your name on."></textarea>
             </div>
           </fieldset>
 
           <fieldset class="line">
-            <span class="ln" aria-hidden="true">08</span>
+            <span class="ln" aria-hidden="true">05</span>
             <div class="field">
-              <label for="motivation"># why do you want in? <span class="hint">(a sentence or two is plenty)</span><span class="req">*</span></label>
+              <label for="motivation"># tell us about something you've built, fixed, or figured out<span class="req">*</span></label>
+              <p class="blockhint">doesn't have to be code — this is how we choose our scholarship seats, so make it real.</p>
               <textarea id="motivation" name="motivation" maxlength="2000" required
-                        placeholder="what's pulling you to this?"></textarea>
+                        placeholder="a project, a hack, a side hustle, something you taught yourself off YouTube, a problem you cracked. what was it, and how'd you pull it off?"></textarea>
             </div>
           </fieldset>
 
           <fieldset class="line">
-            <span class="ln" aria-hidden="true">09</span>
+            <span class="ln" aria-hidden="true">06</span>
             <div class="field">
-              <label for="availability"># Saturdays 11:30–12:30, Jul 25 – Sep 26<span class="req">*</span></label>
+              <label for="availability"># Saturdays 11:30–12:30, Jul 25 – Sep 26 — can you make it?<span class="req">*</span></label>
               <select id="availability" name="availability" required>
                 <option value="" disabled selected hidden>select…</option>
                 <option value="Yes, all of them">Yes, I can make all of them</option>
                 <option value="Most of them">Most of them</option>
                 <option value="Not sure yet">Not sure yet</option>
               </select>
+            </div>
+          </fieldset>
+
+          <fieldset class="line">
+            <span class="ln" aria-hidden="true">07</span>
+            <div class="field">
+              <label for="parent_name"># a parent or guardian's name <span class="hint">(who we'll talk to)</span><span class="req">*</span></label>
+              <input id="parent_name" name="parent_name" type="text" autocomplete="name"
+                     maxlength="120" required placeholder="who we'll be in touch with" />
+            </div>
+          </fieldset>
+
+          <fieldset class="line">
+            <span class="ln" aria-hidden="true">08</span>
+            <div class="field">
+              <label for="parent_phone"># their phone <span class="hint">(we sort scheduling + tuition by text)</span><span class="req">*</span></label>
+              <input id="parent_phone" name="parent_phone" type="tel" autocomplete="tel"
+                     maxlength="40" required placeholder="(425) 555-0123" />
+            </div>
+          </fieldset>
+
+          <fieldset class="line">
+            <span class="ln" aria-hidden="true">09</span>
+            <div class="field">
+              <label for="parent_email"># their email<span class="req">*</span></label>
+              <input id="parent_email" name="parent_email" type="email" autocomplete="email"
+                     maxlength="200" required placeholder="you@example.com" />
             </div>
           </fieldset>
 
@@ -163,7 +165,7 @@
           <fieldset class="line">
             <span class="ln" aria-hidden="true">11</span>
             <div class="field">
-              <label for="referral_code"># referral code <span class="hint">(optional — you both get a class free)</span></label>
+              <label for="referral_code"># referral code <span class="hint">(optional — you both get $25 off)</span></label>
               <input id="referral_code" name="referral_code" type="text" maxlength="12"
                      autocapitalize="characters" autocomplete="off" spellcheck="false"
                      placeholder="a friend's code, e.g. 37WHPQ5" />
@@ -176,7 +178,7 @@
 
         <div class="submit-row">
           <button class="submit" type="submit" id="submit-btn">Submit application →</button>
-          <span class="submit-note">no account · no payment · just hit send</span>
+          <span class="submit-note">no account · nothing to pay to apply · we reply by text</span>
         </div>
 
         <div class="statusbar" aria-hidden="true">
