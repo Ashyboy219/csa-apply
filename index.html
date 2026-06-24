@@ -4,11 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Code Share Academy · build the AI passion project that gets you noticed</title>
-  <meta name="description" content="A 9-week AI + coding cohort for curious beginners. A total beginner ships a real, working AI project that's entirely theirs, built on Claude Max, included free. First class free, then $25 a class. Seats limited." />
+  <meta name="description" content="Nine weeks, online. A total beginner builds a real AI project that's entirely theirs, on Claude Max, included free. Taught by 1st-place TiE Global Pitch winners. First class free, then $25 a class." />
   <meta name="color-scheme" content="dark" />
 
   <meta property="og:title" content="Code Share Academy · build the passion project that gets you noticed" />
-  <meta property="og:description" content="AI + coding for curious beginners. Ship a real project that's entirely yours, on Claude Max, included free. First class free. Seats limited." />
+  <meta property="og:description" content="Your kid builds a real AI project from scratch, on Claude Max, included free. Taught by 1st-place TiE Global Pitch winners. First class free." />
   <meta property="og:type" content="website" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -27,7 +27,7 @@
         <span class="brand-path">/ the-edge.md</span>
       </a>
       <div class="nav-right">
-        <span class="status"><span class="pulse" aria-hidden="true"></span> fall cohort · filling now</span>
+        <span class="status"><span class="pulse" aria-hidden="true"></span> first cohort · starts Jul 25</span>
         <a class="badge-free" href="/apply">1ST&nbsp;CLASS&nbsp;FREE →</a>
       </div>
     </div>
@@ -41,37 +41,40 @@
         <div class="hero-copy">
           <p class="eyebrow">// ai + coding · beginners welcome</p>
           <h1 class="headline">Build the <span class="accent">passion project</span> that makes everyone look your way.</h1>
-          <p class="lede">A 9-week cohort where a total beginner goes from zero to shipping <b>a real, working AI project that's entirely theirs</b>. The kind of standout work that <b>gets a kid noticed, on an application and anywhere else.</b></p>
+          <p class="lede">Nine weeks, online. A total beginner ships a real, working AI project that's <b>entirely theirs</b>, and walks out able to explain how it works. The kind of standout that gets noticed.</p>
           <div class="cta-row">
-            <a class="btn btn-primary" href="/apply">Claim your seat →</a>
-            <a class="btn btn-ghost" href="tel:+14256775903">Call or text</a>
+            <a class="btn btn-primary" href="/apply">Apply now →</a>
+            <span class="cta-alt">or <a href="tel:+14256775903">call or text (425) 677-5903</a></span>
           </div>
-          <p class="cta-note"><b>1st class free</b> · then $25 a class, pay as you go · ~3 min to apply</p>
+          <p class="cta-note"><b>First class free.</b> Then $25 a class, only when they show up. Cancel anytime.</p>
+          <p class="proofline">Taught by <b>1st-place TiE Global Pitch Competition</b> winners · <a href="https://www.geekwire.com/2026/students-pitch-startups-in-regional-tie-young-entrepreneurs-finals-vying-to-three-peat-in-global-contest/" target="_blank" rel="noopener noreferrer">featured in GeekWire</a></p>
         </div>
 
         <aside class="hero-panel" aria-label="Example student project">
           <div class="editor code-editor">
             <div class="editor-bar">
               <span class="dots small" aria-hidden="true"><i></i><i></i><i></i></span>
-              <span class="tab">passion_project.py <span class="x" aria-hidden="true">×</span></span>
+              <span class="tab">quiz_bot.py <span class="x" aria-hidden="true">×</span></span>
               <span class="editor-meta">~/code-share ›&nbsp; UTF-8</span>
             </div>
             <div class="code-scroll">
               <div class="code">
-                <div class="row"><span class="gut">1</span><span class="cm"># passion_project.py · shipped in week 7</span></div>
-                <div class="row"><span class="gut">2</span><span>&nbsp;</span></div>
-                <div class="row"><span class="gut">3</span><span><span class="kw">from</span> studio <span class="kw">import</span> Agent, ship</span></div>
-                <div class="row"><span class="gut">4</span><span>&nbsp;</span></div>
-                <div class="row"><span class="gut">5</span><span>idea = <span class="str">"an app that quizzes my class on anything"</span></span></div>
-                <div class="row"><span class="gut">6</span><span>app&nbsp;&nbsp;= <span class="fn">Agent</span>(idea).<span class="fn">build</span>()&nbsp;&nbsp;&nbsp;<span class="cm"># describe it → AI writes the code</span></span></div>
-                <div class="row"><span class="gut">7</span><span>&nbsp;</span></div>
-                <div class="row"><span class="gut">8</span><span><span class="fn">ship</span>(app)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># live, shareable, and entirely theirs</span></span></div>
-                <div class="row"><span class="gut">9</span><span><span class="cm"># reviewed by a founder who ships real AI</span> <span class="ok">✓</span><span class="caret" aria-hidden="true"></span></span></div>
+                <div class="row"><span class="gut">1</span><span class="cm"># quiz_bot.py · week 7</span></div>
+                <div class="row"><span class="gut">2</span><span><span class="kw">import</span> random</span></div>
+                <div class="row"><span class="gut">3</span><span>&nbsp;</span></div>
+                <div class="row"><span class="gut">4</span><span>bank = <span class="fn">load</span>(<span class="str">"my_class.csv"</span>)&nbsp;&nbsp;<span class="cm"># questions they wrote</span></span></div>
+                <div class="row"><span class="gut">5</span><span>score = <span class="str">0</span></span></div>
+                <div class="row"><span class="gut">6</span><span>&nbsp;</span></div>
+                <div class="row"><span class="gut">7</span><span><span class="kw">for</span> q <span class="kw">in</span> random.<span class="fn">sample</span>(bank, <span class="str">5</span>):</span></div>
+                <div class="row"><span class="gut">8</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> <span class="fn">ask</span>(q.prompt) == q.answer:</span></div>
+                <div class="row"><span class="gut">9</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;score += <span class="str">1</span></span></div>
+                <div class="row"><span class="gut">10</span><span>&nbsp;</span></div>
+                <div class="row"><span class="gut">11</span><span><span class="fn">print</span>(<span class="str">f"you got {score} / 5"</span>)<span class="caret" aria-hidden="true"></span></span></div>
               </div>
             </div>
             <div class="statusbar" aria-hidden="true">
-              <span class="sb-left"><span class="sb-dot"></span><span class="ok-t">shipped</span><span class="sep">·</span><span>main</span><span class="sep">·</span><span>Python</span></span>
-              <span class="sb-right"><span>built by a first-timer</span></span>
+              <span class="sb-left"><span class="sb-dot"></span><span class="ok-t">runs</span><span class="sep">·</span><span>main</span><span class="sep">·</span><span>Python</span></span>
+              <span class="sb-right"><span>every line by a first-timer</span></span>
             </div>
           </div>
         </aside>
@@ -95,7 +98,7 @@
       <div class="wrap statement-in">
         <p class="eyebrow">// the window</p>
         <p class="big">Every kid is about to <span class="muted">use</span> AI. The few who learn to <span class="accent">build</span> with it are the ones who get noticed.</p>
-        <p class="sub">Most kids will spend this year asking AI for answers. A few will spend it learning to build. This is for the few.</p>
+        <p class="sub">A year from now, your kid is asking AI for answers, or shipping things they built. This is where that starts.</p>
       </div>
     </section>
 
@@ -103,7 +106,7 @@
     <section class="maxband">
       <div class="wrap maxband-in">
         <span class="max-tag">CLAUDE MAX INCLUDED</span>
-        <p class="max-copy">Every student builds on <b>Claude Max</b>, the same $200&#8202;/&#8202;mo frontier AI that working developers ship with. No toy sandbox, no watered-down classroom edition. Included free, the entire cohort.</p>
+        <p class="max-copy">Every student builds on <b>Claude Max</b>, the same frontier AI working developers ship with. They pay <b>$200 a month</b> for it. Your kid uses it free, the entire cohort.</p>
       </div>
     </section>
 
@@ -138,7 +141,7 @@
           </ul>
           <div class="payoff">
             <p class="payoff-label">// the payoff</p>
-            <p class="payoff-copy">A real, finished project to show: a <b>standout</b> for any portfolio, application, or interview down the road.</p>
+            <p class="payoff-copy">A finished project they can show: a <b>standout</b> on any application or interview down the road.</p>
           </div>
           <p class="tools-line">tools: Teachable Machine · Replit · Claude / ChatGPT / Gemini<br />nothing to install, it all runs in the browser</p>
         </div>
@@ -164,8 +167,8 @@
             <figcaption><span class="nm">Arnav Gollapally</span><span class="ro">instructor</span></figcaption>
           </figure>
         </div>
-        <p class="credit">Led by <b>1st-place TiE Global Pitch Competition winners</b>, founders shipping real AI products today. Your child learns from the people who build the thing, not a textbook. We keep the cohort small on purpose, and read every application.</p>
-        <p class="sources">
+        <p class="credit">These three won <b>1st place at the TiE Global Pitch Competition</b> and ship real AI products now. Your kid learns from people who build the thing, not a textbook. We keep the first cohort small, and read every application.</p>
+        <p class="sources"><span class="src-label">featured in</span>
           <a href="https://www.geekwire.com/2026/students-pitch-startups-in-regional-tie-young-entrepreneurs-finals-vying-to-three-peat-in-global-contest/" target="_blank" rel="noopener noreferrer">GeekWire</a>
           <span class="sep">·</span>
           <a href="https://www.linkedin.com/posts/tie-seattle_tyeseattle-tyeglobal-duggai-activity-7473807275753623552-PwHP" target="_blank" rel="noopener noreferrer">TiE Seattle</a>
@@ -175,24 +178,35 @@
       </div>
     </section>
 
+    <!-- ───────── what happens next ───────── -->
+    <section class="nextsteps">
+      <div class="wrap">
+        <p class="section-label">// what happens after you apply</p>
+        <ol class="steps">
+          <li><span class="step-n">1</span><span class="step-t"><b>Apply in ~3 minutes.</b> A few questions about your kid. No payment, no account.</span></li>
+          <li><span class="step-n">2</span><span class="step-t"><b>We read every one</b> and reply within a few days, by text or email.</span></li>
+          <li><span class="step-n">3</span><span class="step-t"><b>First class is free.</b> Come see it, then decide. No pressure either way.</span></li>
+        </ol>
+      </div>
+    </section>
+
     <!-- ───────── final CTA ───────── -->
     <section class="cta-band">
       <div class="wrap cta-band-in">
         <div class="cta-top">
           <div>
             <h2 class="cta-h">First class, free.</h2>
-            <p class="cta-p">Then $25 a class, pay as you go. No package, no pressure, just the open seat while it lasts.</p>
+            <p class="cta-p">Then $25 a class, only when they show up. No package. Cancel anytime.</p>
           </div>
-          <span class="badge-free g">SEATS LIMITED</span>
+          <span class="badge-free g">FIRST COHORT · 12 SEATS</span>
         </div>
         <div class="cta-foot">
           <div class="claim">
-            <div class="claim-h">Claim your seat</div>
-            <div class="claim-s">apply online in ~3 minutes, or call or text to register</div>
+            <div class="claim-h">Apply for the fall cohort</div>
+            <div class="claim-s">starts Jul 25 · ~3 minutes · we read every one</div>
           </div>
           <a class="phone" href="tel:+14256775903">(425) 677-5903</a>
           <div class="cta-actions">
-            <a class="btn btn-ghost" href="tel:+14256775903">Call or text</a>
             <a class="btn btn-primary" href="/apply">Apply now →</a>
           </div>
         </div>
