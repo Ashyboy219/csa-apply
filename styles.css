@@ -775,9 +775,10 @@ a.badge-free:hover { background: var(--green); color: #08130b; }
 .winreel-slide img {
   display: block;
   width: 100%;
+  height: auto;
   aspect-ratio: 16 / 10;
   object-fit: cover;
-  object-position: center 26%;
+  object-position: center 22%;
   background: var(--raised-3);
 }
 .winreel-cap {
