@@ -106,7 +106,7 @@ function renderSuccess(info) {
     ? `
     <div class="refer-box">
       <div class="refer-h">Refer a friend &mdash; you both get $25 off</div>
-      <div class="refer-sub">Share your link. When a friend joins with it, you each get $25 off. No limit on how many friends.</div>
+      <div class="refer-sub">Share your link. When a friend joins with it, you each get $25 off the cohort. No limit on how many friends.</div>
       <div class="refer-row">
         <input class="refer-link" id="refer-link" type="text" readonly value="${escapeHtml(link)}" aria-label="Your referral link" />
         <button class="copy-btn" type="button" id="copy-link">Copy link</button>
@@ -127,13 +127,13 @@ function renderSuccess(info) {
       <div class="cmt"># grade: <span class="val">${escapeHtml(info.grade)}</span> · experience: <span class="val">${escapeHtml(info.experience)}</span></div>
       ${referredLine}
       <br />
-      <div>We read every one. Expect a text at <span class="val">${escapeHtml(info.parentPhone)}</span> within a few days.</div>
+      <div>We read every one &mdash; scholarship seats included. Expect a text at <span class="val">${escapeHtml(info.parentPhone)}</span> within a few days.</div>
       <div class="cmt"># questions before then? call or text <a href="tel:+14256775903">(425) 677-5903</a></div>
       ${referBlock}
     </div>
     <div class="statusbar" aria-hidden="true">
-      <span class="sb-left"><span class="sb-dot"></span><span class="ok-t">saved</span><span class="sep">·</span><span>main</span><span class="sep">·</span><span>see you Saturday</span></span>
-      <span class="sb-right">first class, free</span>
+      <span class="sb-left"><span class="sb-dot"></span><span class="ok-t">saved</span><span class="sep">·</span><span>main</span><span class="sep">·</span><span>we read every one</span></span>
+      <span class="sb-right">fall cohort · limited seats</span>
     </div>`;
 
   const copyBtn = document.getElementById("copy-link");
