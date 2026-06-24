@@ -1,9 +1,10 @@
-// POST /api/admin/login  { password }  -> sets the session cookie.
+// POST /api/admin/login  { name, password }  -> sets the session cookie and
+// records the admin's name (for attribution + their connected inbox).
 import { checkPassword, issueToken, sessionCookie, noStore, ok, fail } from '../_auth.js';
+import { rpc } from '../_supabase.js';
 
-// Best-effort per-instance throttle. Not bulletproof across serverless
-// instances, but combined with a strong ADMIN_PASSWORD + the 400ms failure
-// delay it makes online brute-force impractical. (See README for hardening.)
+// Best-effort per-instance throttle. Combined with the failure delay it makes
+// online brute-force impractical for a shared passphrase. (See ADMIN.md.)
 const attempts = new Map(); // ip -> { count, until }
 
 export default async function handler(req, res) {
@@ -31,6 +32,13 @@ export default async function handler(req, res) {
   }
 
   attempts.delete(ip);
+  const name = String(body.name || '').trim().slice(0, 60) || 'instructor';
+  // Record the admin so decisions can be attributed and their inbox tracked.
+  try {
+    await rpc('admin_upsert_self', { p_name: name });
+  } catch {
+    /* non-fatal: identity is convenience, not the auth boundary */
+  }
   res.setHeader('Set-Cookie', sessionCookie(issueToken()));
-  return ok(res, { ok: true });
+  return ok(res, { ok: true, name });
 }

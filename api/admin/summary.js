@@ -8,12 +8,16 @@ const MODEL = process.env.SUMMARY_MODEL || 'claude-haiku-4-5-20251001';
 
 const SYSTEM_PROMPT =
   'You are an admissions triage assistant for a middle-school coding camp run by kid founders. ' +
-  "Given one applicant's data, write 2-3 punchy sentences an instructor can read in five seconds: " +
-  'who they are, their experience level, and what they want to build. Then add one final line ' +
-  'beginning "Scholarship:" giving a blunt read on scholarship-worthiness and likely follow-through, ' +
-  "judged mainly from their motivation answer (what they've built, fixed, or figured out). " +
-  'Be concrete and specific to THIS applicant. No fluff, no preamble, no restating the questions, ' +
-  'no markdown, no headers. Plain text only. Stay under 60 words total.';
+  'The camp is for curious beginners — enthusiasm and follow-through matter far more than existing skill. ' +
+  "Given one applicant's data, respond in EXACTLY this shape, plain text, no markdown:\n" +
+  'Line 1: "VERDICT: accept" or "VERDICT: reject" or "VERDICT: maybe" — your honest recommendation ' +
+  '(lean accept for genuine curiosity/effort; reject only for clearly low-effort or wrong-fit; maybe when torn).\n' +
+  'Then 2-3 punchy sentences an instructor can read in five seconds: who they are, their experience level, ' +
+  'and what they want to build.\n' +
+  'Then a final line beginning "Scholarship:" with a blunt read on scholarship-worthiness and likely ' +
+  "follow-through, judged mainly from their motivation answer (what they've built, fixed, or figured out).\n" +
+  'Be concrete and specific to THIS applicant. No preamble, no restating the questions, no headers. ' +
+  'Keep the whole thing under 65 words.';
 
 // Minimize PII sent to the model: first name only, no parent contact.
 function redact(app) {
@@ -50,7 +54,12 @@ async function summarize(app) {
   if (!resp.ok) throw new Error(`anthropic_${resp.status}`);
   const data = await resp.json();
   const block = (data.content || []).find((b) => b.type === 'text');
-  return block ? block.text.trim() : '';
+  const text = block ? block.text.trim() : '';
+  // Pull the VERDICT line off the front; keep the rest as the summary.
+  const m = text.match(/VERDICT:\s*(accept|reject|maybe)/i);
+  const verdict = m ? m[1].toLowerCase() : null;
+  const summary = text.replace(/^\s*VERDICT:.*\r?\n?/i, '').trim();
+  return { summary, verdict };
 }
 
 export default async function handler(req, res) {
@@ -69,10 +78,10 @@ export default async function handler(req, res) {
   if (!app || !app.id) return fail(res, 400, 'Missing application');
 
   try {
-    const summary = await summarize(app);
+    const { summary, verdict } = await summarize(app);
     if (!summary) return fail(res, 502, 'Empty summary');
-    const row = await rpc('admin_set_summary', { p_id: app.id, p_summary: summary });
-    return ok(res, { summary, application: row });
+    const row = await rpc('admin_set_summary', { p_id: app.id, p_summary: summary, p_verdict: verdict });
+    return ok(res, { summary, verdict, application: row });
   } catch {
     return fail(res, 502, 'Summary failed');
   }

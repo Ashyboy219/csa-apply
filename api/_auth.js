@@ -80,8 +80,10 @@ export function requireAdmin(req) {
 }
 
 export function checkPassword(input) {
-  const expected = process.env.ADMIN_PASSWORD || '';
-  if (!expected || input == null) return false;
+  // Shared passphrase; defaults to 'dugger' so the tool works out of the box,
+  // overridable via ADMIN_PASSWORD. Anyone with it can sign in (trusted team).
+  const expected = process.env.ADMIN_PASSWORD || 'dugger';
+  if (input == null) return false;
   return safeEqual(input, expected);
 }
 

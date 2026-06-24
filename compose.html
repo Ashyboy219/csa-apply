@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Compose · Code Share Academy</title>
+  <meta name="color-scheme" content="dark" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+
+  <header class="nav">
+    <div class="wrap nav-in">
+      <a class="brand" href="/admin">
+        <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="brand-name">CODE&nbsp;SHARE&nbsp;ACADEMY</span>
+        <span class="brand-path">/ compose.eml</span>
+      </a>
+      <div class="nav-right">
+        <a class="ghost-btn" href="/admin">← back to board</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="compose-main">
+    <div class="wrap compose-wrap">
+      <p class="eyebrow">// email · applicant outreach</p>
+      <h1 class="headline compose-h">Send the <span class="accent">word</span>.</h1>
+      <p class="lede" id="compose-lede">Loading applicant…</p>
+
+      <form class="editor compose-editor" id="compose-form" hidden novalidate>
+        <div class="editor-bar">
+          <span class="dots small" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="tab">email.eml <span class="x" aria-hidden="true">×</span></span>
+          <span class="editor-meta" id="compose-from-meta"></span>
+        </div>
+        <div class="editor-body">
+          <div class="compose-to" id="compose-to"></div>
+
+          <div class="compose-grid">
+            <div>
+              <label for="tmpl"># template</label>
+              <select id="tmpl">
+                <option value="admit">Admit — pay $225 via Zelle</option>
+                <option value="scholarship">Scholarship — full ride</option>
+                <option value="waitlist">Waitlist</option>
+                <option value="decline">Decline</option>
+              </select>
+            </div>
+            <div>
+              <label for="from"># from (which inbox)</label>
+              <select id="from"></select>
+            </div>
+          </div>
+
+          <p class="lock-note" id="lock-note" hidden>🔒 Templates are locked — only Ashish can edit the wording. Pick a template and a from-inbox, then send.</p>
+
+          <label for="subject"># subject</label>
+          <input id="subject" type="text" />
+
+          <label for="body"># body</label>
+          <textarea id="body"></textarea>
+
+          <p class="compose-status" id="compose-status"></p>
+          <div class="submit-row" style="padding:16px 0 0; display:flex; gap:14px; align-items:center; flex-wrap:wrap">
+            <button class="submit" type="submit" id="send-btn">Send email →</button>
+            <a class="ghost-btn" href="/admin">cancel</a>
+          </div>
+        </div>
+        <div class="statusbar" aria-hidden="true">
+          <span class="sb-left"><span class="sb-dot"></span><span id="compose-state">draft</span></span>
+          <span class="sb-right">we read every one</span>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <script type="module" src="compose.js"></script>
+</body>
+</html>

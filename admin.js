@@ -1,56 +1,52 @@
 // Code Share Academy — admin review dashboard.
-// Talks only to the cookie-gated /api/admin/* functions; no DB keys live here.
+// Talks only to the cookie-gated /api/admin/* functions; no DB keys here.
 // `?mock=1` loads sample data and skips the network for local UI work.
 
 const MOCK = new URLSearchParams(location.search).get('mock') === '1';
-const THRESHOLD = 110; // px of drag before a swipe counts
-const MAX_ROT = 14; // deg of tilt at full drag
+const THRESHOLD = 110;
+const MAX_ROT = 14;
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
 const DIR_STATUS = { right: 'enrolled', left: 'declined', down: 'waitlist' };
-
-const COHORT = 'Saturdays 11:30–12:30 PM Pacific, Jul 25 – Sep 26, on Zoom.';
-const ZELLE = '425-306-8726';
+const PILES = ['applied', 'enrolled', 'waitlist', 'declined'];
 
 // ───────── elements ─────────
 const loginView = document.getElementById('login-view');
 const boardView = document.getElementById('board-view');
 const loginForm = document.getElementById('login-form');
+const loginName = document.getElementById('login-name');
 const pwInput = document.getElementById('pw');
 const loginErr = document.getElementById('login-err');
 const authState = document.getElementById('auth-state');
 const authDot = document.getElementById('auth-dot');
 const logoutBtn = document.getElementById('logout-btn');
-const queueMeta = document.getElementById('queue-meta');
-const queueMetaText = document.getElementById('queue-meta-text');
+const connectBtn = document.getElementById('connect-gmail');
+const whoami = document.getElementById('whoami');
 
+const pileBar = document.getElementById('pile-bar');
 const stack = document.getElementById('stack');
 const tpl = document.getElementById('card-tpl');
 const cardActions = document.getElementById('card-actions');
 const emptyState = document.getElementById('empty-state');
+const emptyH = document.getElementById('empty-h');
+const emptyS = document.getElementById('empty-s');
+const emptyTick = document.getElementById('empty-tick');
 const scholarToggle = document.getElementById('scholar-toggle');
+const boardHint = document.querySelector('.board-hint');
 
-const drawer = document.getElementById('drawer');
-const drawerOverlay = document.getElementById('drawer-overlay');
-const drawerBody = document.getElementById('drawer-body');
-const drawerName = document.getElementById('drawer-name');
-
-const composerOverlay = document.getElementById('composer-overlay');
-const composerForm = document.getElementById('composer');
-const tmplSelect = document.getElementById('tmpl-select');
-const composeFrom = document.getElementById('compose-from');
-const composeSubject = document.getElementById('compose-subject');
-const composeBody = document.getElementById('compose-body');
-const composeTo = document.getElementById('compose-to');
-const composeStatus = document.getElementById('compose-status');
-const composeSend = document.getElementById('compose-send');
+const profileTab = document.getElementById('profile-tab');
+const profileLoc = document.getElementById('profile-loc');
+const profileEmpty = document.getElementById('profile-empty');
+const profileContent = document.getElementById('profile-content');
+const toast = document.getElementById('toast');
 
 // ───────── state ─────────
-let config = { aiEnabled: false, emailEnabled: false, fromAccounts: [], zelle: ZELLE };
-let queue = []; // applications still pending a decision
-let idx = 0; // index of the front card within queue
-let composerRec = null; // applicant currently in the composer
-let lastFocus = null; // element to restore focus to when an overlay closes
+let config = { aiEnabled: false, emailEnabled: false, canConnectGmail: false, fromAccounts: [], zelle: '425-306-8726' };
+let allApps = [];
+let pile = 'applied';
+let queue = [];
+let idx = 0;
+let busy = false;
+let adminName = localStorage.getItem('csa_admin_name') || '';
 
 // ───────── api ─────────
 async function api(path, opts = {}) {
@@ -63,16 +59,15 @@ async function api(path, opts = {}) {
 
 // ───────── boot ─────────
 async function boot() {
+  handleGmailReturn();
   if (MOCK) {
-    config = { aiEnabled: false, emailEnabled: true, fromAccounts: [{ label: 'hello@codeshareacademy.com', id: 'mock' }], zelle: ZELLE };
+    config = { aiEnabled: false, emailEnabled: true, canConnectGmail: true, fromAccounts: [{ label: 'hello@codeshareacademy.com', id: 'mock', owner: 'shared' }], zelle: '425-306-8726' };
     startBoard(SAMPLE.slice());
     return;
   }
   const res = await api('applications');
   if (res.status === 401) return showLogin();
   if (!res.ok) {
-    // Authenticated but the data call failed — a config/server issue, not a
-    // login problem. Don't bounce silently to the password screen.
     showLogin();
     loginErr.textContent = 'Logged in, but couldn’t load applications — check the server config (ADMIN_DB_SECRET) and reload.';
     loginErr.classList.add('show');
@@ -90,27 +85,39 @@ function showLogin() {
   loginView.hidden = false;
   boardView.hidden = true;
   logoutBtn.hidden = true;
-  queueMeta.hidden = true;
-  pwInput.focus();
+  connectBtn.hidden = true;
+  whoami.hidden = true;
+  if (adminName) loginName.value = adminName;
+  (adminName ? pwInput : loginName).focus();
 }
 
 function startBoard(apps) {
-  queue = apps.filter((a) => a.status === 'applied');
-  idx = 0;
+  allApps = apps;
   loginView.hidden = true;
   boardView.hidden = false;
   logoutBtn.hidden = false;
-  renderStack();
+  connectBtn.hidden = !config.canConnectGmail;
+  whoami.hidden = !adminName;
+  whoami.textContent = adminName ? `${adminName}` : '';
+  updateCounts();
+  setPile('applied');
 }
 
 // ───────── login ─────────
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   loginErr.classList.remove('show');
-  if (MOCK) return boot();
+  adminName = loginName.value.trim() || adminName;
+  if (MOCK) {
+    if (adminName) localStorage.setItem('csa_admin_name', adminName);
+    return boot();
+  }
   authState.textContent = 'checking…';
-  const res = await api('login', { method: 'POST', body: JSON.stringify({ password: pwInput.value }) });
+  const res = await api('login', { method: 'POST', body: JSON.stringify({ name: adminName, password: pwInput.value }) });
   if (res.ok) {
+    const data = await res.json().catch(() => ({}));
+    adminName = data.name || adminName;
+    if (adminName) localStorage.setItem('csa_admin_name', adminName);
     authState.textContent = 'unlocked';
     authDot.style.background = 'var(--green)';
     pwInput.value = '';
@@ -127,6 +134,44 @@ logoutBtn.addEventListener('click', async () => {
   location.reload();
 });
 
+connectBtn.addEventListener('click', async () => {
+  if (MOCK) return showToast('Connect Gmail isn’t available in mock mode', 'err');
+  showToast('Starting Gmail connection…');
+  try {
+    const res = await api('connect', { method: 'POST', body: JSON.stringify({ name: adminName }) });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.redirectUrl) { window.location.href = data.redirectUrl; return; }
+    showToast(data.error || 'Couldn’t start Gmail connection', 'err');
+  } catch {
+    showToast('Couldn’t start Gmail connection', 'err');
+  }
+});
+
+// ───────── piles ─────────
+function updateCounts() {
+  for (const p of PILES) {
+    const n = allApps.filter((a) => a.status === p).length;
+    const el = document.querySelector(`[data-pile-n="${p}"]`);
+    if (el) el.textContent = String(n);
+  }
+}
+
+function setPile(p) {
+  pile = p;
+  pileBar.querySelectorAll('.pile').forEach((b) => {
+    const on = b.dataset.pile === p;
+    b.classList.toggle('is-active', on);
+    b.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  queue = allApps.filter((a) => a.status === p);
+  idx = 0;
+  renderStack();
+}
+
+pileBar.querySelectorAll('.pile').forEach((b) =>
+  b.addEventListener('click', () => setPile(b.dataset.pile))
+);
+
 // ───────── card stack ─────────
 function renderStack() {
   stack.innerHTML = '';
@@ -134,12 +179,18 @@ function renderStack() {
   const empty = remaining <= 0;
   emptyState.hidden = !empty;
   cardActions.style.visibility = empty ? 'hidden' : 'visible';
-  queueMeta.hidden = false;
-  queueMetaText.textContent = empty ? 'queue clear' : `${remaining} to review`;
-  if (empty) return;
+  boardHint.style.visibility = empty ? 'hidden' : 'visible';
+
+  if (empty) {
+    const labels = { applied: ['Pile clear', 'Every application here has a decision.'], enrolled: ['No admits yet', 'Admitted students will show up here.'], waitlist: ['Waitlist empty', 'No one is waitlisted right now.'], declined: ['None declined', 'Declined applications will show up here.'] };
+    const [h, s] = labels[pile] || ['Empty', ''];
+    emptyH.textContent = h; emptyS.textContent = s;
+    emptyTick.textContent = pile === 'applied' ? '✓' : '·';
+    renderProfile(null);
+    return;
+  }
 
   const slice = queue.slice(idx, idx + 4);
-  // Append back-to-front so the front card is painted last (on top).
   for (let d = slice.length - 1; d >= 0; d--) {
     const rec = slice[d];
     const card = tpl.content.firstElementChild.cloneNode(true);
@@ -150,7 +201,15 @@ function renderStack() {
     if (d === 0) attachDrag(card, rec);
   }
   syncScholar();
+  renderProfile(queue[idx]);
   ensureSummary(queue[idx]);
+}
+
+function verdictMeta(v) {
+  if (v === 'accept') return { cls: 'accept', label: '✓ accept' };
+  if (v === 'reject') return { cls: 'reject', label: '✗ reject' };
+  if (v === 'maybe') return { cls: 'maybe', label: '~ maybe' };
+  return { cls: '', label: 'no verdict yet' };
 }
 
 function fillCard(card, rec) {
@@ -159,11 +218,18 @@ function fillCard(card, rec) {
   card.querySelector('[data-name]').textContent = rec.student_name || '—';
   card.querySelector('[data-grade]').textContent = rec.grade || '';
   card.querySelector('[data-exp]').textContent = rec.experience || '';
-  card.querySelector('[data-loc]').textContent = areaCodeHint(rec.parent_phone);
   card.querySelector('[data-idea]').textContent = rec.build_idea || '—';
   card.querySelector('[data-count]').textContent = `${idx + 1}/${queue.length}`;
-  const schol = card.querySelector('[data-schol]');
-  schol.hidden = !rec.scholarship;
+  card.querySelector('[data-state]').textContent = rec.status || 'applied';
+  card.querySelector('[data-schol]').hidden = !rec.scholarship;
+
+  const vm = verdictMeta(rec.ai_verdict);
+  const pillEl = card.querySelector('[data-verdict-pill]');
+  pillEl.textContent = vm.label;
+  pillEl.className = 'verdict-pill' + (vm.cls ? ' ' + vm.cls : '');
+  card.classList.remove('v-accept', 'v-reject', 'v-maybe');
+  if (vm.cls) card.classList.add('v-' + vm.cls);
+
   const ai = card.querySelector('[data-ai]');
   if (rec.ai_summary) {
     ai.textContent = rec.ai_summary;
@@ -172,34 +238,31 @@ function fillCard(card, rec) {
     ai.textContent = 'summarizing…';
     ai.classList.add('loading');
   } else {
-    // No AI configured — fall back to their own words (the scholarship answer)
-    // so the card is never blank.
     const m = (rec.motivation || '').trim();
-    ai.textContent = m ? '“' + (m.length > 150 ? m.slice(0, 150) + '…' : m) + '”' : 'Open the full profile to read their answers.';
+    ai.textContent = m ? '“' + (m.length > 140 ? m.slice(0, 140) + '…' : m) + '”' : 'Open the profile to read their answers.';
     ai.classList.remove('loading');
   }
 }
 
-// Lazily generate the AI summary for the front applicant, once.
 async function ensureSummary(rec) {
   if (!rec || MOCK || !config.aiEnabled || rec.ai_summary || rec._sumTried) return;
   rec._sumTried = true;
   try {
     const res = await api('summary', { method: 'POST', body: JSON.stringify({ application: rec }) });
-    if (!res.ok) throw new Error('summary');
-    const { summary } = await res.json();
+    if (!res.ok) throw new Error();
+    const { summary, verdict } = await res.json();
     rec.ai_summary = summary;
-    const front = frontCard();
-    if (front && queue[idx] === rec) {
-      const ai = front.querySelector('[data-ai]');
-      ai.textContent = summary;
-      ai.classList.remove('loading');
+    rec.ai_verdict = verdict || rec.ai_verdict;
+    if (queue[idx] === rec) {
+      const front = frontCard();
+      if (front) fillCard(front, rec);
+      renderProfile(rec);
     }
   } catch {
-    const front = frontCard();
-    if (front && queue[idx] === rec) {
-      const ai = front.querySelector('[data-ai]');
-      ai.textContent = 'Summary unavailable. Open the full profile.';
+    if (queue[idx] === rec) {
+      const front = frontCard();
+      const ai = front && front.querySelector('[data-ai]');
+      if (ai) ai.textContent = 'Summary unavailable. Read their answers in the profile.';
     }
   }
 }
@@ -239,8 +302,7 @@ function attachDrag(card, rec) {
     if (dy > THRESHOLD && Math.abs(dx) < Math.abs(dy)) dir = 'down';
     else if (dx > THRESHOLD) dir = 'right';
     else if (dx < -THRESHOLD) dir = 'left';
-    if (dir && commit(dir)) return; // committed → card flies off
-    // under threshold, or commit refused (mid-fling) → snap home
+    if (dir && commit(dir)) return;
     card.classList.add('snapback');
     card.style.transform = '';
     vAdmit.style.opacity = vDecline.style.opacity = vWait.style.opacity = 0;
@@ -250,19 +312,14 @@ function attachDrag(card, rec) {
 }
 
 function onKey(e) {
-  if (!boardView.hidden && drawer.classList.contains('open')) return;
-  if (!composerOverlay.classList.contains('open') && !boardView.hidden) {
-    if (e.key === 'ArrowRight') commit('right');
-    else if (e.key === 'ArrowLeft') commit('left');
-    else if (e.key === 'ArrowDown') commit('down');
-  }
+  if (boardView.hidden) return;
+  if (e.target && e.target.matches && e.target.matches('input, textarea, select')) return;
+  if (e.key === 'ArrowRight') { e.preventDefault(); commit('right'); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); commit('left'); }
+  else if (e.key === 'ArrowDown') { e.preventDefault(); commit('down'); }
 }
 
 // ───────── decisions ─────────
-let busy = false;
-
-// Returns true if the decision was applied; false if it refused (mid-fling or
-// no card) so the caller can snap the dragged card back instead of stranding it.
 function commit(dir) {
   if (busy) return false;
   const rec = queue[idx];
@@ -272,6 +329,7 @@ function commit(dir) {
   const status = DIR_STATUS[dir];
   rec.status = status;
   saveUpdate(rec.id, { status });
+  updateCounts();
 
   let advanced = false;
   const advance = () => {
@@ -281,18 +339,13 @@ function commit(dir) {
     renderStack();
     busy = false;
   };
-  if (reduceMotion) {
-    advance();
-    return true;
-  }
+  if (reduceMotion) { advance(); return true; }
   const flyX = dir === 'right' ? 700 : dir === 'left' ? -700 : 0;
   const flyY = dir === 'down' ? 800 : 0;
   card.classList.add('fling');
   card.style.transform = `translate(${flyX}px, ${flyY}px) rotate(${flyX / 40}deg)`;
   card.style.opacity = '0';
   card.addEventListener('transitionend', advance, { once: true });
-  // Guarantee the queue advances even if transitionend never fires
-  // (interrupted transitions, background tabs, headless rendering).
   setTimeout(advance, 420);
   return true;
 }
@@ -309,103 +362,102 @@ scholarToggle.addEventListener('click', () => {
   scholarToggle.classList.toggle('on', rec.scholarship);
   const badge = frontCard()?.querySelector('[data-schol]');
   if (badge) badge.hidden = !rec.scholarship;
+  renderProfile(rec);
   saveUpdate(rec.id, { scholarship: rec.scholarship });
 });
 
 cardActions.querySelectorAll('[data-dir]').forEach((b) =>
   b.addEventListener('click', () => commit(b.dataset.dir))
 );
-document.getElementById('open-profile').addEventListener('click', () => openDrawer(queue[idx]));
-document.getElementById('email-btn').addEventListener('click', () => openComposer(queue[idx]));
 document.getElementById('reload-btn').addEventListener('click', () => location.reload());
 
 async function saveUpdate(id, patch) {
   if (MOCK || !id) return;
   try {
-    await api('update', { method: 'POST', body: JSON.stringify({ id, ...patch }) });
-  } catch { /* optimistic UI; a failed write is non-fatal here */ }
+    await api('update', { method: 'POST', body: JSON.stringify({ id, reviewer: adminName || null, ...patch }) });
+  } catch { /* optimistic */ }
 }
 
-// ───────── full-profile drawer ─────────
-function openDrawer(rec) {
-  if (!rec) return;
-  lastFocus = document.activeElement;
-  drawerName.textContent = slug((rec.student_name || 'applicant').split(/\s+/)[0]);
-  drawerBody.innerHTML = '';
+// ───────── inline profile pane ─────────
+function renderProfile(rec) {
+  if (!rec) {
+    profileEmpty.hidden = false;
+    profileContent.hidden = true;
+    profileContent.innerHTML = '';
+    profileTab.textContent = 'profile';
+    profileLoc.textContent = '';
+    return;
+  }
+  profileEmpty.hidden = true;
+  profileContent.hidden = false;
+  profileContent.innerHTML = '';
+  profileTab.textContent = slug((rec.student_name || 'applicant').split(/\s+/)[0]);
+  profileLoc.textContent = areaCodeHint(rec.parent_phone);
 
-  // AI summary block (with on-demand generate)
+  // head: name + verdict
+  const head = el('div', 'profile-head');
+  const nm = el('div', 'profile-name'); nm.textContent = rec.student_name || '—';
+  const vm = verdictMeta(rec.ai_verdict);
+  const vEl = el('div', 'profile-verdict' + (vm.cls ? ' ' + vm.cls : '')); vEl.textContent = vm.label;
+  head.append(nm, vEl);
+  profileContent.append(head);
+
+  // chips: status, grade, exp, scholarship
+  const chips = el('div', 'profile-chips');
+  chips.append(chip(rec.status || 'applied', 'status-' + (rec.status || 'applied')));
+  if (rec.grade) chips.append(chip(rec.grade));
+  if (rec.experience) chips.append(chip(rec.experience));
+  if (rec.scholarship) chips.append(chip('★ scholarship', 'schol'));
+  profileContent.append(chips);
+
+  // AI summary box
   const aiBox = el('div', 'profile-ai');
-  const aiHead = el('div', 'k');
-  aiHead.append(text('AI SUMMARY'));
+  const aiHead = el('div', 'k'); aiHead.append(text('AI SUMMARY'));
   if (config.aiEnabled && !MOCK) {
-    const gen = el('button', 'ai-gen-btn');
-    gen.textContent = rec.ai_summary ? 'regenerate' : 'generate';
+    const gen = el('button', 'ai-gen-btn'); gen.textContent = rec.ai_summary ? 'regenerate' : 'generate';
     gen.addEventListener('click', () => generateSummary(rec, aiVal, gen));
     aiHead.append(gen);
   }
-  const aiVal = el('div', 'v');
-  aiVal.textContent = rec.ai_summary || 'Not generated yet.';
+  const aiVal = el('div', 'v'); aiVal.textContent = rec.ai_summary || (config.aiEnabled ? 'Generating…' : 'AI not configured yet.');
   aiBox.append(aiHead, aiVal);
-  drawerBody.append(aiBox);
+  profileContent.append(aiBox);
 
-  field('Status', (rec.status || 'applied') + (rec.scholarship ? '  ·  ★ scholarship' : ''));
-  field('Grade', rec.grade);
-  field('Experience', rec.experience);
-  field('Availability', rec.availability);
-  field('Location (inferred from area code)', areaCodeHint(rec.parent_phone));
-  essay('What they want to build', rec.build_idea);
-  essay('Built / fixed / figured out', rec.motivation);
-  contactField('Parent / guardian', rec.parent_name);
-  linkField('Parent phone', rec.parent_phone, 'tel:' + (rec.parent_phone || '').replace(/[^\d+]/g, ''));
-  linkField('Parent email', rec.parent_email, 'mailto:' + (rec.parent_email || ''));
-  field('Heard from', rec.heard_from || '—');
-  field('Referral code used', rec.referred_by_code || '—');
-  field('Applied', fmtDate(rec.created_at));
+  // essays
+  profileContent.append(field('What they want to build', rec.build_idea, true));
+  profileContent.append(field('Built / fixed / figured out', rec.motivation, true));
+
+  // grid of facts
+  const grid = el('div', 'p-grid');
+  grid.append(field('Availability', rec.availability));
+  grid.append(field('Location (area code)', areaCodeHint(rec.parent_phone)));
+  grid.append(field('Heard from', rec.heard_from || '—'));
+  grid.append(field('Referral used', rec.referred_by_code || '—'));
+  profileContent.append(grid);
+
+  // contact
+  profileContent.append(field('Parent / guardian', rec.parent_name || '—'));
+  const cg = el('div', 'p-grid');
+  cg.append(linkField('Phone', rec.parent_phone, 'tel:' + (rec.parent_phone || '').replace(/[^\d+]/g, '')));
+  cg.append(linkField('Email', rec.parent_email, 'mailto:' + (rec.parent_email || '')));
+  profileContent.append(cg);
+  profileContent.append(field('Applied', fmtDate(rec.created_at)));
 
   // notes
-  const nf = el('div', 'profile-field');
-  nf.append(kv('Notes'));
-  const ta = el('textarea');
-  ta.value = rec.admin_notes || '';
-  ta.placeholder = 'Private notes for the team…';
+  const nf = el('div', 'p-field'); nf.append(kv('Notes'));
+  const ta = el('textarea'); ta.value = rec.admin_notes || ''; ta.placeholder = 'Private notes for the team…';
   ta.addEventListener('blur', () => {
-    if (ta.value !== (rec.admin_notes || '')) {
-      rec.admin_notes = ta.value;
-      saveUpdate(rec.id, { note: ta.value });
-    }
+    if (ta.value !== (rec.admin_notes || '')) { rec.admin_notes = ta.value; saveUpdate(rec.id, { note: ta.value }); }
   });
   nf.append(ta);
-  drawerBody.append(nf);
+  profileContent.append(nf);
 
   // actions
-  const actions = el('div', 'drawer-actions');
-  const emailBtn = el('button', 'act-btn');
-  emailBtn.textContent = '✉ Email';
-  emailBtn.addEventListener('click', () => { closeDrawer(); openComposer(rec); });
-  actions.append(emailBtn);
-  drawerBody.append(actions);
-
-  drawer.classList.add('open');
-  drawerOverlay.classList.add('open');
-  drawer.setAttribute('aria-hidden', 'false');
-  document.getElementById('drawer-close').focus();
-
-  function field(k, v) { drawerBody.append(simpleField(k, v)); }
-  function contactField(k, v) { drawerBody.append(simpleField(k, v || '—')); }
-  function essay(k, v) {
-    const f = simpleField(k, v || '—');
-    f.classList.add('essay');
-    drawerBody.append(f);
-  }
-  function linkField(k, label, href) {
-    const f = el('div', 'profile-field');
-    f.append(kv(k));
-    const v = el('div', 'v');
-    if (label) { const a = el('a'); a.href = href; a.textContent = label; v.append(a); }
-    else v.textContent = '—';
-    f.append(v);
-    drawerBody.append(f);
-  }
+  const actions = el('div', 'profile-actions');
+  const email = el('a', 'email-btn'); email.textContent = '✉ Email';
+  email.href = '/compose?id=' + encodeURIComponent(rec.id);
+  if (rec.last_emailed_at) { const sent = el('span', 'p-chip'); sent.textContent = 'emailed · ' + (rec.last_email_template || ''); actions.append(email, sent); }
+  else actions.append(email);
+  profileContent.append(actions);
 }
 
 async function generateSummary(rec, valEl, btn) {
@@ -414,159 +466,36 @@ async function generateSummary(rec, valEl, btn) {
   try {
     const res = await api('summary', { method: 'POST', body: JSON.stringify({ application: rec }) });
     if (!res.ok) throw new Error();
-    const { summary } = await res.json();
+    const { summary, verdict } = await res.json();
     rec.ai_summary = summary;
-    valEl.textContent = summary;
-    btn.textContent = 'regenerate';
-    const front = frontCard();
-    if (front && queue[idx] === rec) {
-      const ai = front.querySelector('[data-ai]');
-      ai.textContent = summary;
-      ai.classList.remove('loading');
-    }
+    rec.ai_verdict = verdict || rec.ai_verdict;
+    if (queue[idx] === rec) { const f = frontCard(); if (f) fillCard(f, rec); }
+    renderProfile(rec);
   } catch {
     valEl.textContent = 'Could not generate a summary.';
-  } finally {
     btn.disabled = false;
   }
 }
 
-function closeDrawer() {
-  drawer.classList.remove('open');
-  drawerOverlay.classList.remove('open');
-  drawer.setAttribute('aria-hidden', 'true');
-  if (lastFocus && lastFocus.focus) lastFocus.focus();
-}
-drawerOverlay.addEventListener('click', closeDrawer);
-document.getElementById('drawer-close').addEventListener('click', closeDrawer);
-
-// ───────── email composer ─────────
-function openComposer(rec, key) {
-  if (!rec) return;
-  lastFocus = document.activeElement;
-  composerRec = rec;
-  composeFrom.innerHTML = '';
-  (config.fromAccounts || []).forEach((a) => {
-    const o = document.createElement('option');
-    o.value = a.id; o.textContent = a.label;
-    composeFrom.append(o);
-  });
-  const chosen = key || (rec.scholarship ? 'scholarship' : 'admit');
-  tmplSelect.value = chosen;
-  composeTo.textContent = `to: ${rec.parent_name || 'parent'} · ${rec.parent_email || 'no email'}`;
-  applyTemplate(chosen, rec);
-
-  const canSend = config.emailEnabled && (config.fromAccounts || []).length > 0;
-  composeSend.disabled = !canSend;
-  composeStatus.className = 'compose-status';
-  composeStatus.textContent = canSend ? '' : 'Email isn’t configured yet (set COMPOSIO_API_KEY + a connected account).';
-
-  composerOverlay.classList.add('open');
-  tmplSelect.focus();
+// ───────── toast + gmail return ─────────
+let toastTimer = null;
+function showToast(msg, type) {
+  toast.textContent = msg;
+  toast.className = 'toast' + (type ? ' ' + type : '');
+  toast.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { toast.hidden = true; }, 3200);
 }
 
-function applyTemplate(key, rec) {
-  const t = TEMPLATES[key](rec);
-  composeSubject.value = t.subject;
-  composeBody.value = t.body;
+function handleGmailReturn() {
+  const g = new URLSearchParams(location.search).get('gmail');
+  if (!g) return;
+  history.replaceState(null, '', location.pathname);
+  setTimeout(() => showToast(g === 'connected' ? '✓ Gmail connected' : 'Gmail connection failed', g === 'connected' ? 'ok' : 'err'), 300);
 }
 
-tmplSelect.addEventListener('change', () => composerRec && applyTemplate(tmplSelect.value, composerRec));
-
-function closeComposer() {
-  composerOverlay.classList.remove('open');
-  if (lastFocus && lastFocus.focus) lastFocus.focus();
-}
-composerOverlay.addEventListener('click', (e) => { if (e.target === composerOverlay) closeComposer(); });
-document.getElementById('composer-close').addEventListener('click', closeComposer);
-
-composerForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  if (!composerRec) return;
-  composeStatus.className = 'compose-status';
-  composeStatus.textContent = 'sending…';
-  if (MOCK) { composeStatus.className = 'compose-status ok'; composeStatus.textContent = 'sent (mock)'; return; }
-  composeSend.disabled = true;
-  try {
-    const res = await api('send-email', {
-      method: 'POST',
-      body: JSON.stringify({
-        id: composerRec.id,
-        to: composerRec.parent_email,
-        subject: composeSubject.value,
-        body: composeBody.value,
-        fromId: composeFrom.value,
-        template: tmplSelect.value,
-      }),
-    });
-    if (!res.ok) throw new Error();
-    composerRec.last_email_template = tmplSelect.value;
-    composeStatus.className = 'compose-status ok';
-    composeStatus.textContent = '✓ sent';
-    setTimeout(closeComposer, 900);
-  } catch {
-    composeStatus.className = 'compose-status err';
-    composeStatus.textContent = 'Send failed. Check the connected account and try again.';
-  } finally {
-    composeSend.disabled = false;
-  }
-});
-
-// ───────── email templates ─────────
-const TEMPLATES = {
-  admit: (r) => ({
-    subject: 'You’re in — Code Share Academy fall cohort',
-    body:
-`Hi ${r.parent_name || 'there'},
-
-Great news — ${first(r)} has a seat in the Code Share Academy fall cohort. We loved the project idea ("${short(r.build_idea)}") and can’t wait to help build it.
-
-Tuition is $225 for the full 10-Saturday cohort. To lock the seat, send $225 via Zelle to ${ZELLE} (Code Share Academy). Reply here once it’s sent and we’ll confirm the spot.
-
-Classes: ${COHORT}
-
-— The Code Share Academy team`,
-  }),
-  scholarship: (r) => ({
-    subject: `A scholarship seat for ${first(r)} — Code Share Academy`,
-    body:
-`Hi ${r.parent_name || 'there'},
-
-We read every application, and ${first(r)}’s stood out — we’d like to offer a full scholarship seat in the fall cohort.
-
-The cohort is normally $225; the scholarship covers it in full, so there’s nothing to pay. (If you ever want to chip in toward another student’s seat, our Zelle is ${ZELLE} — completely optional.)
-
-Classes: ${COHORT}
-
-Just reply to claim the seat and we’ll send the Zoom details.
-
-— The Code Share Academy team`,
-  }),
-  waitlist: (r) => ({
-    subject: `Code Share Academy — waitlist update for ${first(r)}`,
-    body:
-`Hi ${r.parent_name || 'there'},
-
-Thank you for applying. The first cohort is only 12 seats and filled quickly, so we’ve placed ${first(r)} on the waitlist. If a seat opens we’ll reach out right away — you’d be first in line.
-
-— The Code Share Academy team`,
-  }),
-  decline: (r) => ({
-    subject: 'Code Share Academy — about your application',
-    body:
-`Hi ${r.parent_name || 'there'},
-
-Thank you for applying to Code Share Academy, and for the time ${first(r)} put into it. We can’t offer a seat this cohort, but we’d genuinely welcome a future application — keep building.
-
-— The Code Share Academy team`,
-  }),
-};
-
-// ───────── utilities ─────────
-function first(r) { return (r.student_name || 'your student').trim().split(/\s+/)[0]; }
-function short(s) { s = (s || '').trim(); return s.length > 80 ? s.slice(0, 80) + '…' : s; }
+// ───────── helpers ─────────
 function slug(s) { return (s || 'applicant').toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '') || 'applicant'; }
-
 function areaCodeHint(phone) {
   const digits = (phone || '').replace(/\D/g, '');
   const m = digits.length >= 10 ? digits.slice(-10).slice(0, 3) : null;
@@ -574,64 +503,58 @@ function areaCodeHint(phone) {
   if (!m) return '☎ unknown';
   return `${m} · ${map[m] || 'unknown area'}`;
 }
-
 function fmtDate(iso) {
   if (!iso) return '—';
-  try {
-    return new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
-  } catch { return iso; }
+  try { return new Date(iso).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }); }
+  catch { return iso; }
 }
-
 function el(tag, cls) { const e = document.createElement(tag); if (cls) e.className = cls; return e; }
 function text(t) { return document.createTextNode(t); }
 function kv(label) { const k = el('div', 'k'); k.textContent = label; return k; }
-function simpleField(k, v) {
-  const f = el('div', 'profile-field');
+function chip(label, cls) { const c = el('span', 'p-chip' + (cls ? ' ' + cls : '')); c.textContent = label; return c; }
+function field(k, v, essay) {
+  const f = el('div', 'p-field' + (essay ? ' essay' : ''));
   f.append(kv(k));
-  const val = el('div', 'v');
-  val.textContent = v == null || v === '' ? '—' : String(v);
+  const val = el('div', 'v'); val.textContent = v == null || v === '' ? '—' : String(v);
   f.append(val);
   return f;
 }
+function linkField(k, label, href) {
+  const f = el('div', 'p-field');
+  f.append(kv(k));
+  const v = el('div', 'v');
+  if (label) { const a = el('a'); a.href = href; a.textContent = label; v.append(a); } else v.textContent = '—';
+  f.append(v);
+  return f;
+}
 
-window.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    if (composerOverlay.classList.contains('open')) return closeComposer();
-    if (drawer.classList.contains('open')) return closeDrawer();
-  }
-  onKey(e);
-});
+window.addEventListener('keydown', onKey);
 
 // ───────── sample data (mock mode) ─────────
 const SAMPLE = [
-  {
-    id: 'm1', status: 'applied', created_at: '2026-06-21T18:30:00Z',
-    student_name: 'Maya Hartwell', grade: '7th grade', experience: 'Tinkered a bit',
+  { id: 'm1', status: 'applied', created_at: '2026-06-21T18:30:00Z', student_name: 'Maya Hartwell', grade: '7th grade', experience: 'Tinkered a bit',
     build_idea: 'An app that quizzes you from your own class notes — you paste them in and it makes flashcards and a practice test.',
-    motivation: 'I fixed my little brother’s Scratch game when it kept crashing — turned out a loop never ended. Took me a weekend of trial and error.',
-    availability: 'Yes, all of them', parent_name: 'Dana Hartwell', parent_phone: '(425) 555-0123',
-    parent_email: 'dana@example.com', heard_from: 'a friend', referred_by_code: '37WHPQ5',
-    ai_summary: 'Maya (7th, tinkered a bit) wants a notes-to-flashcards study app — a genuinely useful, well-scoped idea.\nScholarship: strong — debugged a real infinite loop in her brother’s game, clear follow-through.',
-    scholarship: false, admin_notes: '',
-  },
-  {
-    id: 'm2', status: 'applied', created_at: '2026-06-22T15:05:00Z',
-    student_name: 'Leo Park', grade: '8th grade', experience: 'Built things before',
+    motivation: 'I fixed my little brother’s Scratch game when it kept crashing — a loop never ended. Took me a weekend of trial and error.',
+    availability: 'Yes, all of them', parent_name: 'Dana Hartwell', parent_phone: '(425) 555-0123', parent_email: 'dana@example.com',
+    heard_from: 'a friend', referred_by_code: '37WHPQ5',
+    ai_summary: 'Maya (7th, tinkered a bit) wants a notes-to-flashcards study app — useful and well-scoped.\nScholarship: strong — debugged a real infinite loop, clear follow-through.',
+    ai_verdict: 'accept', scholarship: false, admin_notes: '' },
+  { id: 'm2', status: 'applied', created_at: '2026-06-22T15:05:00Z', student_name: 'Leo Park', grade: '8th grade', experience: 'Built things before',
     build_idea: 'A Discord bot for my robotics team that tracks who’s bringing what to competitions and pings people the night before.',
     motivation: 'I set up a shared spreadsheet for our team and added formulas so it auto-totals parts cost. People actually use it now.',
-    availability: 'Most of them', parent_name: 'Grace Park', parent_phone: '(206) 555-0177',
-    parent_email: 'grace.park@example.com', heard_from: 'school', referred_by_code: null,
-    ai_summary: '', scholarship: false, admin_notes: '',
-  },
-  {
-    id: 'm3', status: 'applied', created_at: '2026-06-23T01:12:00Z',
-    student_name: 'Aria Nguyen', grade: '6th grade', experience: 'Total beginner',
+    availability: 'Most of them', parent_name: 'Grace Park', parent_phone: '(206) 555-0177', parent_email: 'grace.park@example.com',
+    heard_from: 'school', referred_by_code: null, ai_summary: '', ai_verdict: 'maybe', scholarship: false, admin_notes: '' },
+  { id: 'm3', status: 'applied', created_at: '2026-06-23T01:12:00Z', student_name: 'Aria Nguyen', grade: '6th grade', experience: 'Total beginner',
     build_idea: 'A website where you log how much water you drink and a little plant grows when you hit your goal.',
     motivation: 'I taught myself to crochet from YouTube and sold a few at a school fair. I like figuring stuff out until it works.',
-    availability: 'Yes, all of them', parent_name: 'Tom Nguyen', parent_phone: '(253) 555-0190',
-    parent_email: 'tnguyen@example.com', heard_from: 'instagram', referred_by_code: null,
-    ai_summary: '', scholarship: true, admin_notes: 'Mom mentioned cost is tight — strong scholarship candidate.',
-  },
+    availability: 'Yes, all of them', parent_name: 'Tom Nguyen', parent_phone: '(253) 555-0190', parent_email: 'tnguyen@example.com',
+    heard_from: 'instagram', referred_by_code: null, ai_summary: '', ai_verdict: null, scholarship: true, admin_notes: 'Cost is tight — strong scholarship candidate.' },
+  { id: 'm4', status: 'enrolled', created_at: '2026-06-20T12:00:00Z', student_name: 'Sam Rivera', grade: '7th grade', experience: 'Tinkered a bit',
+    build_idea: 'A game where you guide a robot through a maze by writing little commands.',
+    motivation: 'I modded a Minecraft world with command blocks so my friends and I could do parkour races.',
+    availability: 'Yes, all of them', parent_name: 'Jo Rivera', parent_phone: '(425) 555-0144', parent_email: 'jo@example.com',
+    heard_from: 'a friend', referred_by_code: null, ai_summary: 'Sam (7th) wants a code-the-robot maze game; modded Minecraft with command blocks.\nScholarship: solid maker instinct.',
+    ai_verdict: 'accept', scholarship: false, admin_notes: '', last_emailed_at: '2026-06-23T00:00:00Z', last_email_template: 'admit' },
 ];
 
 boot();

@@ -3,7 +3,7 @@
 // then records the outreach on the application row.
 import { requireAdmin, sameOrigin, ok, fail } from '../_auth.js';
 import { rpc } from '../_supabase.js';
-import { sendingAccounts } from './config.js';
+import { allSendingAccounts } from './_accounts.js';
 
 export default async function handler(req, res) {
   if (!requireAdmin(req)) return fail(res, 401, 'Unauthorized');
@@ -21,7 +21,7 @@ export default async function handler(req, res) {
   const { id, to, subject, body, fromId, template } = payload;
   if (!to || !subject || !body) return fail(res, 400, 'Missing recipient, subject, or body');
 
-  const accounts = sendingAccounts();
+  const accounts = await allSendingAccounts();
   if (!accounts.length) return fail(res, 503, 'No sending account configured');
   // Don't silently fall back to another inbox when a from-account is named.
   const account = fromId ? accounts.find((a) => a.id === fromId) : accounts[0];

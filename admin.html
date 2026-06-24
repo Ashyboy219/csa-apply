@@ -23,8 +23,9 @@
         <span class="brand-path">/ admin.py</span>
       </a>
       <div class="nav-right">
-        <span class="status" id="queue-meta" hidden><span class="pulse" aria-hidden="true"></span> <span id="queue-meta-text">reviewing</span></span>
-        <button class="act-scholar" id="logout-btn" hidden>log out</button>
+        <button class="ghost-btn" id="connect-gmail" hidden>✉ Connect Gmail</button>
+        <span class="who" id="whoami" hidden></span>
+        <button class="ghost-btn" id="logout-btn" hidden>log out</button>
       </div>
     </div>
   </header>
@@ -40,8 +41,10 @@
           <span class="editor-meta">~/admin&nbsp;›&nbsp; UTF-8</span>
         </div>
         <div class="editor-body">
-          <label for="pw"># passphrase</label>
-          <input id="pw" type="password" autocomplete="current-password" placeholder="••••••••••••" />
+          <label for="login-name"># your name <span class="hint">(so we know who reviewed)</span></label>
+          <input id="login-name" type="text" autocomplete="name" placeholder="first name" />
+          <label for="pw" style="margin-top:16px"># passphrase</label>
+          <input id="pw" type="password" autocomplete="current-password" placeholder="••••••••" />
           <p class="login-err" id="login-err">access denied</p>
           <div class="submit-row" style="padding:18px 0 0">
             <button class="submit" type="submit" id="login-btn">authenticate →</button>
@@ -56,23 +59,55 @@
 
     <!-- ───────── review board ───────── -->
     <section id="board-view" hidden>
-      <div class="stack" id="stack"><!-- cards injected by admin.js --></div>
 
-      <div id="empty-state" hidden>
-        <div class="empty-tick">✓</div>
-        <p class="empty-h">Queue clear</p>
-        <p class="empty-s">Every application has a decision. New ones will appear here.</p>
-        <button class="act-btn" id="reload-btn">Reload</button>
+      <div class="pile-bar" id="pile-bar" role="tablist" aria-label="Application piles">
+        <button class="pile pile-pending is-active" data-pile="applied" role="tab" aria-selected="true">
+          <span class="pile-k">Pending</span><span class="pile-n" data-pile-n="applied">0</span>
+        </button>
+        <button class="pile pile-admit" data-pile="enrolled" role="tab" aria-selected="false">
+          <span class="pile-k">Admitted</span><span class="pile-n" data-pile-n="enrolled">0</span>
+        </button>
+        <button class="pile pile-wait" data-pile="waitlist" role="tab" aria-selected="false">
+          <span class="pile-k">Waitlist</span><span class="pile-n" data-pile-n="waitlist">0</span>
+        </button>
+        <button class="pile pile-decline" data-pile="declined" role="tab" aria-selected="false">
+          <span class="pile-k">Declined</span><span class="pile-n" data-pile-n="declined">0</span>
+        </button>
       </div>
 
-      <div id="card-actions">
-        <button class="act-btn act-decline" data-dir="left" title="Decline (←)">← Decline</button>
-        <button class="act-btn act-waitlist" data-dir="down" title="Waitlist (↓)">↓ Waitlist</button>
-        <button class="act-btn act-admit" data-dir="right" title="Admit (→)">Admit →</button>
-        <span class="act-sep" aria-hidden="true"></span>
-        <button class="act-scholar" id="scholar-toggle" title="Flag scholarship">★ scholarship</button>
-        <button class="act-btn" id="open-profile">Full profile</button>
-        <button class="act-btn" id="email-btn">✉ Email</button>
+      <div class="board-grid">
+        <!-- left: the swipe stack + actions -->
+        <div class="board-left">
+          <div class="stack" id="stack"><!-- cards injected by admin.js --></div>
+
+          <div id="empty-state" hidden>
+            <div class="empty-tick" id="empty-tick">✓</div>
+            <p class="empty-h" id="empty-h">Pile clear</p>
+            <p class="empty-s" id="empty-s">Nothing left to review here.</p>
+            <button class="act-btn" id="reload-btn">Reload</button>
+          </div>
+
+          <div id="card-actions">
+            <button class="act-btn act-decline" data-dir="left" title="Decline (←)">← Decline</button>
+            <button class="act-btn act-waitlist" data-dir="down" title="Waitlist (↓)">↓ Waitlist</button>
+            <button class="act-btn act-admit" data-dir="right" title="Admit (→)">Admit →</button>
+            <button class="act-scholar" id="scholar-toggle" title="Flag scholarship">★ scholarship</button>
+          </div>
+          <p class="board-hint">drag or use <kbd>←</kbd> <kbd>↓</kbd> <kbd>→</kbd> · pick a pile above to revisit decisions</p>
+        </div>
+
+        <!-- right: the always-on full profile of the front applicant -->
+        <aside class="profile-pane editor" id="profile-pane" aria-label="Applicant profile">
+          <div class="editor-bar">
+            <span class="dots small" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="tab"><span id="profile-tab">profile</span>.json <span class="x" aria-hidden="true">×</span></span>
+            <span class="editor-meta" id="profile-loc"></span>
+          </div>
+          <div class="profile-scroll" id="profile-scroll">
+            <p class="profile-empty" id="profile-empty">No applicants in this pile.</p>
+            <div id="profile-content" hidden></div>
+          </div>
+        </aside>
       </div>
     </section>
   </main>
@@ -83,7 +118,7 @@
       <div class="editor-bar">
         <span class="dots small" aria-hidden="true"><i></i><i></i><i></i></span>
         <span class="tab"><span data-tab>applicant</span>.json <span class="x" aria-hidden="true">×</span></span>
-        <span class="editor-meta" data-loc></span>
+        <span class="verdict-pill" data-verdict-pill>· · ·</span>
       </div>
       <div class="card-body">
         <div class="card-name" data-name></div>
@@ -99,53 +134,13 @@
       <span class="verdict decline" aria-hidden="true">DECLINE</span>
       <span class="verdict waitlist" aria-hidden="true">WAITLIST</span>
       <div class="statusbar" aria-hidden="true">
-        <span class="sb-left"><span class="sb-dot"></span><span class="ok-t" data-state>pending</span><span class="sep">·</span><span>swipe / arrow keys</span></span>
+        <span class="sb-left"><span class="sb-dot"></span><span class="ok-t" data-state>pending</span></span>
         <span class="sb-right" data-count></span>
       </div>
     </article>
   </template>
 
-  <!-- ───────── full-profile drawer ───────── -->
-  <div class="drawer-overlay" id="drawer-overlay"></div>
-  <aside class="drawer editor" id="drawer" role="dialog" aria-modal="true" aria-label="Applicant profile" aria-hidden="true">
-    <div class="editor-bar">
-      <span class="dots small" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span class="tab"><span id="drawer-name">applicant</span>.json <span class="x" aria-hidden="true">×</span></span>
-      <button class="drawer-close" id="drawer-close" aria-label="Close">×</button>
-    </div>
-    <div class="drawer-scroll" id="drawer-body"><!-- fields injected --></div>
-  </aside>
-
-  <!-- ───────── email composer ───────── -->
-  <div class="composer-overlay" id="composer-overlay">
-    <form class="editor composer" id="composer" role="dialog" aria-modal="true" aria-label="Compose email" novalidate>
-      <div class="editor-bar">
-        <span class="dots small" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span class="tab">email.eml <span class="x" aria-hidden="true">×</span></span>
-        <button class="drawer-close" id="composer-close" type="button" aria-label="Close">×</button>
-      </div>
-      <div class="editor-body">
-        <div class="compose-meta" id="compose-to"></div>
-        <label for="tmpl-select"># template</label>
-        <select id="tmpl-select">
-          <option value="admit">Admit — pay $225 via Zelle</option>
-          <option value="scholarship">Scholarship — full ride</option>
-          <option value="waitlist">Waitlist</option>
-          <option value="decline">Decline</option>
-        </select>
-        <label for="compose-from"># from</label>
-        <select id="compose-from"></select>
-        <label for="compose-subject"># subject</label>
-        <input id="compose-subject" type="text" />
-        <label for="compose-body"># body</label>
-        <textarea id="compose-body"></textarea>
-        <p class="compose-status" id="compose-status"></p>
-        <div class="submit-row" style="padding:16px 0 0">
-          <button class="submit" type="submit" id="compose-send">Send email →</button>
-        </div>
-      </div>
-    </form>
-  </div>
+  <div id="toast" class="toast" role="status" hidden></div>
 
   <script type="module" src="admin.js"></script>
 </body>
