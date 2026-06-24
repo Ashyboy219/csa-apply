@@ -97,7 +97,7 @@ function renderSuccess(info) {
     : null;
 
   const referredLine = info.referralAccepted
-    ? `<div class="cmt"># applied with a friend's link &mdash; when you join, you <b>both</b> get a class free <span class="ok">✓</span></div>`
+    ? `<div class="cmt"># applied with a friend's link &mdash; when you join, you <b>both</b> get $25 off <span class="ok">✓</span></div>`
     : info.referralEntered
       ? `<div class="cmt"># (that referral code didn't match, but you're all set)</div>`
       : "";
@@ -105,8 +105,8 @@ function renderSuccess(info) {
   const referBlock = link
     ? `
     <div class="refer-box">
-      <div class="refer-h">Refer a friend &mdash; you both get a class free</div>
-      <div class="refer-sub">Share your link. When a friend joins with it, you each get a free class. No limit on how many friends.</div>
+      <div class="refer-h">Refer a friend &mdash; you both get $25 off</div>
+      <div class="refer-sub">Share your link. When a friend joins with it, you each get $25 off. No limit on how many friends.</div>
       <div class="refer-row">
         <input class="refer-link" id="refer-link" type="text" readonly value="${escapeHtml(link)}" aria-label="Your referral link" />
         <button class="copy-btn" type="button" id="copy-link">Copy link</button>
