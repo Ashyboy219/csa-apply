@@ -270,7 +270,8 @@ a.badge-free:hover { background: var(--green); color: #08130b; }
 }
 .cta-row {
   display: flex;
-  gap: 12px;
+  align-items: center;
+  gap: 14px;
   flex-wrap: wrap;
   margin-top: 28px;
 }
@@ -281,6 +282,26 @@ a.badge-free:hover { background: var(--green); color: #08130b; }
   margin-top: 14px;
 }
 .cta-note b { color: var(--green); font-weight: 600; }
+
+.cta-alt {
+  font-size: 14px;
+  color: var(--muted);
+}
+.cta-alt a { color: var(--text); border-bottom: 1px solid var(--line); }
+.cta-alt a:hover { border-bottom-color: var(--green-35); color: var(--green); }
+
+.proofline {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--dim);
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line-soft);
+  line-height: 1.6;
+}
+.proofline b { color: var(--text); font-weight: 600; }
+.proofline a { color: var(--dim); border-bottom: 1px solid transparent; }
+.proofline a:hover { color: var(--green); border-bottom-color: var(--green-35); }
 
 /* code editor (hero) */
 .editor {
@@ -609,6 +630,44 @@ a.badge-free:hover { background: var(--green); color: #08130b; }
 }
 .sources a { color: var(--dim); border-bottom: 1px solid transparent; }
 .sources a:hover { color: var(--green); border-bottom-color: var(--green-35); }
+.src-label { text-transform: uppercase; letter-spacing: 0.12em; color: var(--fainter); margin-right: 4px; }
+
+/* ============================================================
+   what happens next
+   ============================================================ */
+.nextsteps { border-bottom: 1px solid var(--line); }
+.nextsteps .wrap { padding-block: clamp(40px, 6vw, 64px); }
+.steps {
+  list-style: none;
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(16px, 2.5vw, 28px);
+}
+.steps li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.step-n {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--green);
+  border: 1px solid var(--green-35);
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.step-t {
+  font-size: clamp(14.5px, 1.4vw, 15.5px);
+  line-height: 1.5;
+  color: var(--muted);
+}
+.step-t b { color: var(--text); }
 
 /* ============================================================
    final CTA band
@@ -886,6 +945,7 @@ footer { background: var(--raised); }
    responsive
    ============================================================ */
 @media (max-width: 900px) {
+  .brand-path { display: none; }
   .hero-in { grid-template-columns: 1fr; gap: 36px; }
   .hero-panel { order: 2; }
   .cur-grid { grid-template-columns: 1fr; gap: 44px; }
@@ -898,6 +958,7 @@ footer { background: var(--raised); }
   .spec:nth-child(2) { border-right: 0; }
   .spec:nth-child(1), .spec:nth-child(2) { border-bottom: 1px solid var(--line-soft); }
   .maxband-in { flex-direction: column; align-items: flex-start; gap: 14px; }
+  .steps { grid-template-columns: 1fr; gap: 16px; }
   .segmented { grid-template-columns: 1fr; }
   .cta-foot { flex-direction: column; align-items: stretch; }
   .phone { margin-left: 0; }
@@ -908,7 +969,10 @@ footer { background: var(--raised); }
   .brand-path { display: none; }
   .status { display: none; }
   .nav-right { gap: 0; }
-  .cta-row .btn { flex: 1; }
+  .brand-name { font-size: 11px; letter-spacing: 0.08em; }
+  .badge-free { font-size: 10px; padding: 5px 8px; }
+  .cta-row .btn { flex: 1 1 auto; }
+  .cta-alt { flex-basis: 100%; }
   .footer-in { flex-direction: column; align-items: flex-start; gap: 6px; }
 }
 
