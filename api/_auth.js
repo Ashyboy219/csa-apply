@@ -34,25 +34,33 @@ function safeEqual(a, b) {
   return crypto.timingSafeEqual(ba, bb);
 }
 
-export function issueToken() {
+// The token now carries the signed-in admin's name so identity is server-verified
+// (and tamper-proof under the HMAC), not just trusted from the client. Endpoints
+// that act on "your" stuff (e.g. connecting a Gmail) read it from here.
+export function issueToken(name) {
   const exp = Math.floor(Date.now() / 1000) + TTL_SECONDS;
-  const payload = Buffer.from(JSON.stringify({ exp })).toString('base64url');
+  const claims = { exp };
+  if (name) claims.name = String(name).slice(0, 60);
+  const payload = Buffer.from(JSON.stringify(claims)).toString('base64url');
   return `${payload}.${sign(payload)}`;
 }
 
+// Returns the decoded payload ({ exp, name? }) on success, or null. Callers that
+// only need a yes/no still work because an object is truthy and null is falsy.
 export function verifyToken(token) {
-  if (!SECRET_OK) return false;
-  if (!token || typeof token !== 'string') return false;
+  if (!SECRET_OK) return null;
+  if (!token || typeof token !== 'string') return null;
   const parts = token.split('.');
-  if (parts.length !== 2) return false;
+  if (parts.length !== 2) return null;
   const [payload, sig] = parts;
-  if (!payload || !sig) return false;
-  if (!safeEqual(sig, sign(payload))) return false;
+  if (!payload || !sig) return null;
+  if (!safeEqual(sig, sign(payload))) return null;
   try {
     const data = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8'));
-    return Boolean(data.exp) && data.exp > Math.floor(Date.now() / 1000);
+    if (!data.exp || data.exp <= Math.floor(Date.now() / 1000)) return null;
+    return data;
   } catch {
-    return false;
+    return null;
   }
 }
 
@@ -80,11 +88,41 @@ export function requireAdmin(req) {
 }
 
 export function checkPassword(input) {
-  // Shared passphrase; defaults to 'dugger' so the tool works out of the box,
-  // overridable via ADMIN_PASSWORD. Anyone with it can sign in (trusted team).
+  // Shared team passphrase; defaults to 'dugger' so the tool works out of the box,
+  // overridable via ADMIN_PASSWORD. Required on EVERY sign-in as an org-wide gate,
+  // on top of each admin's personal password (see hashPassword/verifyPassword).
   const expected = process.env.ADMIN_PASSWORD || 'dugger';
   if (input == null) return false;
   return safeEqual(input, expected);
+}
+
+// Per-admin personal password. We store only a salted scrypt digest
+// (`scrypt$<saltHex>$<hashHex>`) — never the plaintext, and no external deps.
+export function hashPassword(plain) {
+  const salt = crypto.randomBytes(16);
+  const dk = crypto.scryptSync(String(plain), salt, 32);
+  return `scrypt$${salt.toString('hex')}$${dk.toString('hex')}`;
+}
+
+export function verifyPassword(plain, stored) {
+  if (!stored || typeof stored !== 'string') return false;
+  const parts = stored.split('$');
+  if (parts.length !== 3 || parts[0] !== 'scrypt') return false;
+  let salt, expected;
+  try {
+    salt = Buffer.from(parts[1], 'hex');
+    expected = Buffer.from(parts[2], 'hex');
+  } catch {
+    return false;
+  }
+  if (!salt.length || !expected.length) return false;
+  let dk;
+  try {
+    dk = crypto.scryptSync(String(plain), salt, expected.length);
+  } catch {
+    return false;
+  }
+  return dk.length === expected.length && crypto.timingSafeEqual(dk, expected);
 }
 
 // Mutating requests must originate from our own page (defense-in-depth on top

@@ -15,6 +15,7 @@ const boardView = document.getElementById('board-view');
 const loginForm = document.getElementById('login-form');
 const loginName = document.getElementById('login-name');
 const pwInput = document.getElementById('pw');
+const teamPwInput = document.getElementById('team-pw');
 const loginErr = document.getElementById('login-err');
 const authState = document.getElementById('auth-state');
 const authDot = document.getElementById('auth-dot');
@@ -113,18 +114,20 @@ loginForm.addEventListener('submit', async (e) => {
     return boot();
   }
   authState.textContent = 'checking…';
-  const res = await api('login', { method: 'POST', body: JSON.stringify({ name: adminName, password: pwInput.value }) });
+  const res = await api('login', { method: 'POST', body: JSON.stringify({ name: adminName, password: pwInput.value, teamPassword: teamPwInput.value }) });
+  const data = await res.json().catch(() => ({}));
   if (res.ok) {
-    const data = await res.json().catch(() => ({}));
     adminName = data.name || adminName;
     if (adminName) localStorage.setItem('csa_admin_name', adminName);
     authState.textContent = 'unlocked';
     authDot.style.background = 'var(--green)';
     pwInput.value = '';
+    teamPwInput.value = '';
+    if (data.created) setTimeout(() => showToast('✓ Password set — use it next time', 'ok'), 400);
     boot();
   } else {
     authState.textContent = 'locked';
-    loginErr.textContent = res.status === 429 ? 'too many attempts — wait a bit' : 'access denied';
+    loginErr.textContent = res.status === 429 ? 'too many attempts — wait a bit' : (data.error || 'access denied');
     loginErr.classList.add('show');
   }
 });
