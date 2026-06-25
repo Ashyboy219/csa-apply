@@ -204,4 +204,44 @@ grant execute on function public.admin_list_admins(text)                   to an
 grant execute on function public.admin_set_gmail(text, text, text, text)   to anon, authenticated;
 grant execute on function public.admin_set_summary(text, uuid, text, text) to anon, authenticated;
 
+-- ── 6. Per-admin personal password (defense-in-depth over the shared passphrase).
+-- Each admin chooses their own password on first sign-in; from then on BOTH the
+-- personal password AND the shared passphrase (ADMIN_PASSWORD) are required to log
+-- in. So knowing the shared passphrase alone no longer lets one instructor sign in
+-- as another. Only a server-side scrypt digest is stored here — never plaintext.
+alter table public.camp_admin
+  add column if not exists password_hash text;
+
+-- Read the stored credential digest for a name (the server hashes + compares).
+create or replace function public.admin_get_credentials(p_secret text, p_name text)
+returns table (name text, password_hash text)
+language plpgsql security definer set search_path = pg_catalog, public
+as $$
+begin
+  if p_secret is null or p_secret <> (select secret from public.camp_admin_config where id) then
+    raise exception 'unauthorized' using errcode = '28000';
+  end if;
+  return query select a.name, a.password_hash from public.camp_admin a where a.name = trim(p_name);
+end;
+$$;
+
+-- Set (or reset) the personal-password digest for a name; creates the row if new.
+create or replace function public.admin_set_password(p_secret text, p_name text, p_hash text)
+returns void language plpgsql security definer set search_path = pg_catalog, public
+as $$
+begin
+  if p_secret is null or p_secret <> (select secret from public.camp_admin_config where id) then
+    raise exception 'unauthorized' using errcode = '28000';
+  end if;
+  insert into public.camp_admin (name, password_hash, last_seen_at)
+  values (trim(p_name), p_hash, now())
+  on conflict (name) do update set password_hash = excluded.password_hash, last_seen_at = now();
+end;
+$$;
+
+revoke all on function public.admin_get_credentials(text, text) from public;
+revoke all on function public.admin_set_password(text, text, text) from public;
+grant execute on function public.admin_get_credentials(text, text) to anon, authenticated;
+grant execute on function public.admin_set_password(text, text, text) to anon, authenticated;
+
 commit;

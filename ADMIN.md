@@ -16,9 +16,18 @@ below are set it loads but login fails — that's expected; nothing is exposed.
 
 ## Sign-in, identity, and the template lock
 
-- Login asks for **your name + the passphrase** (default **`dugger`**, override
-  with `ADMIN_PASSWORD`). Anyone with the passphrase is in. Your name is recorded
-  on every decision (`reviewed_by`) and used to pick your own inbox.
+- Login asks for **your name + your personal password + the team passphrase**:
+  - The **team passphrase** (default **`dugger`**, override `ADMIN_PASSWORD`) is the
+    shared org-wide gate — required on every sign-in.
+  - Your **personal password** is one you pick yourself the **first time you sign in**
+    (any value, no rules); after that it must match. Only a salted **scrypt** digest
+    is stored (`camp_admin.password_hash`), never the plaintext.
+  - Requiring **both** means knowing the shared passphrase alone can't let one
+    instructor sign in as another — so nobody else can reach your connected inbox or
+    act as you. The signed-in name is baked into the HMAC-signed session cookie.
+  - Forgot your personal password? Clear it so the next sign-in re-sets it:
+    `update public.camp_admin set password_hash = null where name = 'You';`
+- Your name is recorded on every decision (`reviewed_by`) and used to pick your inbox.
 - **Only "Ashish" can edit email wording.** On `/compose`, everyone can pick a
   canned template + a from-inbox and send, but the subject/body are read-only
   unless your name is Ashish — so nobody accidentally sends edited text from a
@@ -72,6 +81,13 @@ fallback); no Composio config → the composer's Send is disabled with a hint.
    still send from a colleague's inbox**.
 4. (Optional) Skip the button entirely by hard-coding inboxes in
    `COMPOSIO_ACCOUNTS`.
+
+> **Note:** Composio-managed OAuth configs start the consent flow via
+> `POST /api/v3/connected_accounts/link` (the older `POST /connected_accounts` path
+> is no longer supported for them). If **Connect Gmail** ever shows "Could not start
+> Gmail connection", the toast now includes Composio's reason — usually a blank/wrong
+> `COMPOSIO_API_KEY` or `COMPOSIO_GMAIL_AUTH_CONFIG_ID`. Both must be **non-empty**;
+> a var that merely *exists* but is empty still shows the button yet fails the call.
 
 ## Rotating the DB secret
 

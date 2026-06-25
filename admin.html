@@ -43,8 +43,10 @@
         <div class="editor-body">
           <label for="login-name"># your name <span class="hint">(so we know who reviewed)</span></label>
           <input id="login-name" type="text" autocomplete="name" placeholder="first name" />
-          <label for="pw" style="margin-top:16px"># passphrase</label>
+          <label for="pw" style="margin-top:16px"># your password <span class="hint">(first time? pick any — you'll reuse it)</span></label>
           <input id="pw" type="password" autocomplete="current-password" placeholder="••••••••" />
+          <label for="team-pw" style="margin-top:16px"># team passphrase <span class="hint">(shared)</span></label>
+          <input id="team-pw" type="password" autocomplete="off" placeholder="••••••••" />
           <p class="login-err" id="login-err">access denied</p>
           <div class="submit-row" style="padding:18px 0 0">
             <button class="submit" type="submit" id="login-btn">authenticate →</button>
